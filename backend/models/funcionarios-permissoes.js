@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const { BaseModel } = app.models['base-model'];
+    const {BaseModel} = require('../config/database/base-model');
 
     class FuncionariosPermissoes extends BaseModel {
         static get tableName() {
@@ -13,20 +13,6 @@ module.exports = (app) => {
                 properties: {
                     funcionario: { type: 'number' },
                     permissao: { type: 'number' },
-                },
-            };
-        }
-
-        static get relationMappings() {
-            // TODO many to many
-            return {
-                permissoes: {
-                    relation: BaseModel.BelongsToOneRelation,
-                    modelClass: app.models.permissoes,
-                    join: {
-                        from: 'categorias.id',
-                        to: 'usuarios.categoria',
-                    },
                 },
             };
         }

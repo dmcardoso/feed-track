@@ -1,8 +1,8 @@
 const knex = require('knex');
-const config = require('../knexfile');
+const config = require('../../knexfile');
 
 module.exports = (args) => {
-    const { mode } = args;
+    const {mode} = args;
     const config_index = (mode && mode === 'dev') ? 'development' : 'production';
     // (config);
 

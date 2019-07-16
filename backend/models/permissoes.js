@@ -1,5 +1,5 @@
-module.exports = (app) => {
-    const { BaseModel } = app.models['base-model'];
+module.exports = (app = null) => {
+    const {BaseModel} = require('../config/database/base-model');
 
     class Permissoes extends BaseModel {
         static get tableName() {
@@ -15,8 +15,8 @@ module.exports = (app) => {
                 type: 'object',
                 required: ['permissao'],
                 properties: {
-                    id: { type: 'integer' },
-                    permissao: { type: 'string', minLength: 1, maxLength: 240 },
+                    id: {type: 'integer'},
+                    permissao: {type: 'string', minLength: 1, maxLength: 240},
                 },
             };
         }

@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const { BaseModel } = app.models['base-model'];
+    const {BaseModel} = require('../config/database/base-model');
 
     class Filiais extends BaseModel {
         static get tableName() {
@@ -17,8 +17,8 @@ module.exports = (app) => {
                 properties: {
                     id: { type: 'integer' },
                     filial: { type: 'string', minLength: 1, maxLength: 80 },
-                    fundacao: { type: 'date-time' },
-                    criacao: { type: 'date-time' },
+                    fundacao: {type: 'string', format: 'date-time'},
+                    criacao: {type: 'string', format: 'date-time'},
                 },
             };
         }
