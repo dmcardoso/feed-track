@@ -1,11 +1,11 @@
-const { Model } = require('objection');
-const { argv } = require('yargs');
+const {Model} = require('objection');
+const {argv} = require('yargs');
 const path = require('path');
 const format = require('date-fns/format');
 const isValid = require('date-fns/is_valid');
 const parse = require('date-fns/parse');
 const db = require('./db')(argv);
-const { QueryBuilder } = require('./query-builder');
+const {QueryBuilder} = require('./query-builder');
 
 Model.knex(db);
 
@@ -39,9 +39,38 @@ class BaseModel extends Model {
     }
 
     $afterInsert(queryContext) {
-        console.log('im in base');
-        console.log(queryContext);
-        console.log(this);
+        // console.log('im in base');
+        // console.log(queryContext);
+        // console.log(this);
+    }
+
+    $beforeInsert(queryContext) {
+        super.$beforeInsert(queryContext);
+
+        const propSchemas = this.constructor.jsonSchema.properties;
+
+        Object.keys(this).forEach((value, index) => {
+            const schema = propSchemas[value];
+            const field = this[value];
+            const date = parse(field);
+
+            if (schema.format === 'date-time' && isValid(date)) {
+                this[value] = format(date, 'YYYY-MM-DD HH:mm:ss');
+            } else if (schema.format === 'date' && isValid(date)) {
+                this[value] = format(date, 'YYYY-MM-DD');
+            }
+        });
+    }
+
+    static query(...args) {
+        const query = super.query(...args);
+
+        // Somehow modify the query.
+        return query.runAfter((result, queryBuilder) => {
+            console.log(queryBuilder.isInsert(), 'é insert?'); // Aqui retorna se é true para insert, tem o método isUpdate também
+            console.log(this.name, 'got result', result); // retorna o nome da model e o resultado da query
+            return result;
+        });
     }
 
     $parseJson(json, opt) {
@@ -62,4 +91,4 @@ class BaseModel extends Model {
     }
 }
 
-module.exports = { BaseModel };
+module.exports = {BaseModel};

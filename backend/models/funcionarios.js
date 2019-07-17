@@ -1,6 +1,7 @@
 module.exports = (app) => {
-    const { BaseModel } = require('../config/database/base-model');
+    const {BaseModel} = require('../config/database/base-model');
     const path = require('path');
+    const format = require('date-fns/format');
 
     class Funcionarios extends BaseModel {
         static get tableName() {
@@ -18,20 +19,33 @@ module.exports = (app) => {
 
         $afterInsert(queryContext) {
             super.$afterInsert(queryContext);
-            console.log(queryContext);
+            // console.log(queryContext);
         }
+
+
+        //
+        // $beforeUpdate(opt, queryContext) {
+        //     // TODO validar novamente as mudanças de datas
+        // }
+
+        // $beforeUpdate(queryContext) {
+        //     super.$beforeInsert(queryContext);
+        //
+        //     this.criacao = format(this.criacao, 'YYYY-MM-DD HH:mm:ss');
+        //     this.nascimento = format(this.nascimento, 'YYYY-MM-DD');
+        // }
 
         static get jsonSchema() {
             return {
                 type: 'object',
                 required: ['nome', 'email', 'nascimento', 'senha', 'criacao'],
                 properties: {
-                    id: { type: 'integer' },
-                    nome: { type: 'string', minLength: 1, maxLength: 240 },
-                    email: { type: 'email' },
-                    nascimento: { type: 'string', format: 'date' },
-                    senha: { type: 'string' },
-                    criacao: { type: 'string', format: 'date-time' },
+                    id: {type: 'integer'},
+                    nome: {type: 'string', minLength: 1, maxLength: 240},
+                    email: {type: 'email'},
+                    nascimento: {type: 'string', format: 'date'},
+                    senha: {type: 'string'},
+                    criacao: {type: 'string', format: 'date-time'},
                 },
             };
         }

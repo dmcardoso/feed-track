@@ -11,6 +11,6 @@ consign()
     .into(app);
 
 
-app.listen(3000, () => {
-    console.log('feedtrack-backend listening on 3000!');
+app.listen(3032, () => {
+    console.log('feedtrack-backend listening on 3032!');
 });

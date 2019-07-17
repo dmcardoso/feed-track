@@ -6,13 +6,14 @@ module.exports = (app) => {
         // console.log();
     };
     const save = async (req, res) => {
+        console.log('oisss');
         // const cargos = await app.models.cargos.query().select('*');
         const cargos = await app.models.funcionarios.query().insert({
             nome: 'Teste carai',
             email: 'emassaassaaaasssail@hotmail.com',
-            nascimento: '1999-06-01',
+            nascimento: '2019-07-09',
             senha: 'asdasdfa',
-            criacao: '1999-06-01 14:25:36',
+            criacao: '2019-07-09 08:14:44',
         });
         res.send(cargos);
         // console.log();
