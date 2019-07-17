@@ -5,7 +5,7 @@ module.exports = (app) => {
         .all(api.cargos.select);
 
     app.route('/funcionarios')
-        .all(api.funcionarios.select);
+        .post(api.funcionarios.save);
 
     // app.get('/cargos', );
 };

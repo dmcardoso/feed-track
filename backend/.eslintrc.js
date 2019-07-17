@@ -18,6 +18,9 @@ module.exports = {
         "indent": ["error", 4],
         "semi": "error",
         "semi-style": ["error", "last"],
-        "camelcase": [0, {properties: "never"}]
+        "camelcase": [0, {properties: "never"}],
+        "global-require": [0],
+        "max-len":  ["error", { "code": 120, "tabWidth": 4 }],
+        "quotes": ["error", "single"]
     },
 };

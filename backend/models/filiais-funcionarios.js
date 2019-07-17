@@ -1,22 +1,23 @@
 module.exports = (app) => {
     const { BaseModel } = require('../config/database/base-model');
 
-    class FuncionariosPermissoes extends BaseModel {
+    class FiliaisFuncionarios extends BaseModel {
         static get tableName() {
-            return 'funcionarios_permissoes';
+            return 'filiais_funcionarios';
         }
 
         static get jsonSchema() {
             return {
                 type: 'object',
-                required: ['funcionario', 'permissao'],
+                required: ['filial', 'funcionario', 'cargo'],
                 properties: {
+                    filial: { type: 'number' },
                     funcionario: { type: 'number' },
-                    permissao: { type: 'number' },
+                    cargo: { type: 'number' },
                 },
             };
         }
     }
 
-    return FuncionariosPermissoes;
+    return FiliaisFuncionarios;
 };
