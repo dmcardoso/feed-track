@@ -7,6 +7,13 @@ class QueryBuilder extends QueryBuilderObjection {
         }
         throw Error('Id é obgigatório!');
     }
+
+    upsert(model) {
+        if (model.id) {
+            return this.update(model).where('id', model.id);
+        }
+        return this.insert(model);
+    }
 }
 
 module.exports = { QueryBuilder };

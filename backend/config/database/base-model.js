@@ -1,11 +1,11 @@
-const {Model} = require('objection');
-const {argv} = require('yargs');
+const { Model } = require('objection');
+const { argv } = require('yargs');
 const path = require('path');
 const format = require('date-fns/format');
 const isValid = require('date-fns/is_valid');
 const parse = require('date-fns/parse');
 const db = require('./db')(argv);
-const {QueryBuilder} = require('./query-builder');
+const { QueryBuilder } = require('./query-builder');
 
 Model.knex(db);
 
@@ -38,11 +38,6 @@ class BaseModel extends Model {
         return json;
     }
 
-    $afterInsert(queryContext) {
-        // console.log('im in base');
-        // console.log(queryContext);
-        // console.log(this);
-    }
 
     $beforeInsert(queryContext) {
         super.$beforeInsert(queryContext);
@@ -91,4 +86,4 @@ class BaseModel extends Model {
     }
 }
 
-module.exports = {BaseModel};
+module.exports = { BaseModel };
