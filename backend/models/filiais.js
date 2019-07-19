@@ -20,6 +20,7 @@ module.exports = (app) => {
                     filial: { type: 'string', minLength: 1, maxLength: 80 },
                     fundacao: { type: 'string', format: 'date-time' },
                     criacao: { type: 'string', format: 'date-time' },
+                    desativado: { type: 'number' },
                 },
             };
         }

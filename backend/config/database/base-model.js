@@ -57,25 +57,17 @@ class BaseModel extends Model {
         });
     }
 
-    static query(...args) {
-        const query = super.query(...args);
-
-        // Somehow modify the query.
-        return query.runAfter((result, queryBuilder) => {
-            console.log(queryBuilder.isInsert(), 'é insert?'); // Aqui retorna se é true para insert, tem o método isUpdate também
-            console.log(this.name, 'got result', result); // retorna o nome da model e o resultado da query
-            return result;
-        });
-    }
-
     $parseJson(json, opt) {
         const object = {};
 
+        const propSchemas = this.constructor.jsonSchema.properties;
         Object.entries(json).forEach(([idx, value]) => {
+            const schema = propSchemas[idx];
             const date = parse(value);
-            if (isValid(date) && value.split(' ').length > 1) {
+
+            if (schema.format === 'date-time' && isValid(date)) {
                 object[idx] = date.toISOString();
-            } else if (isValid(date)) {
+            } else if (schema.format === 'date' && isValid(date)) {
                 object[idx] = `${date.toISOString().split('T')[0]}`;
             } else {
                 object[idx] = value;

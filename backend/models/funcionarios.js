@@ -22,6 +22,7 @@ module.exports = (app) => {
                     nascimento: { type: 'string', format: 'date' },
                     senha: { type: 'string' },
                     criacao: { type: 'string', format: 'date-time' },
+                    desativado: { type: 'number' },
                 },
             };
         }

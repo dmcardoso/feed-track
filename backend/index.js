@@ -1,6 +1,6 @@
 const app = require('express')();
 const consign = require('consign');
-const path = require('path');
+require('date-fns/locale/pt');
 
 consign()
 // .include()

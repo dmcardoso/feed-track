@@ -18,6 +18,7 @@ module.exports = (app) => {
                 properties: {
                     id: { type: 'integer' },
                     descricao: { type: 'string', minLength: 1, maxLength: 240 },
+                    desativado: { type: 'number' },
                 },
             };
         }

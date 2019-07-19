@@ -14,14 +14,27 @@ module.exports = (app) => {
         static get jsonSchema() {
             return {
                 type: 'object',
-                required: ['nome', 'email', 'nascimento', 'senha', 'criacao'],
+                required: [
+                    'descricao',
+                    'criacao',
+                    'vendas',
+                    'cadastros',
+                    'renovacoes',
+                    'reativacoes',
+                    'funcionario',
+                    'filial',
+                ],
                 properties: {
                     id: { type: 'integer' },
-                    nome: { type: 'string', minLength: 1, maxLength: 240 },
-                    email: { type: 'email' },
-                    nascimento: { type: 'string', format: 'date-time' },
-                    senha: { type: 'string' },
+                    descricao: { type: 'string' },
                     criacao: { type: 'string', format: 'date-time' },
+                    vendas: { type: 'integer' },
+                    cadastros: { type: 'integer' },
+                    renovacoes: { type: 'integer' },
+                    reativacoes: { type: 'integer' },
+                    funcionario: { type: 'number' },
+                    filial: { type: 'number' },
+                    desativado: { type: 'number' },
                 },
             };
         }
