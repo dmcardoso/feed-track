@@ -10,7 +10,7 @@ exports.up = function (knex) {
             return knex.schema.createTable('filiais', function (table) {
                 table.increments('id').primary();
                 table.string('filial', 80).notNullable();
-                table.dateTime('fundacao').notNullable();
+                table.date('fundacao');
                 table.dateTime('criacao').notNullable();
             });
         })
@@ -19,7 +19,7 @@ exports.up = function (knex) {
                 table.increments('id').primary();
                 table.string('nome', 240).notNullable();
                 table.string('email', 240).unique();
-                table.dateTime('nascimento').notNullable();
+                table.date('nascimento');
                 table.string('senha').notNullable();
                 table.dateTime('criacao').notNullable();
             });

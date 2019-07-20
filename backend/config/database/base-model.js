@@ -1,9 +1,9 @@
 const { Model } = require('objection');
 const { argv } = require('yargs');
 const path = require('path');
-const format = require('date-fns/format');
-const isValid = require('date-fns/is_valid');
-const parse = require('date-fns/parse');
+const moment = require('moment');
+
+moment.locale('pt-BR');
 const db = require('./db')(argv);
 const { QueryBuilder } = require('./query-builder');
 
@@ -28,10 +28,16 @@ class BaseModel extends Model {
             const schema = propSchemas[prop];
             const value = json[prop];
 
-            if (schema.format === 'date-time' && value instanceof Date) {
-                json[prop] = format(value, 'DD/MM/YYYY HH:mm:ss');
-            } else if (schema.format === 'date' && value instanceof Date) {
-                json[prop] = format(value, 'DD/MM/YYYY');
+            if (schema.format === 'date-time') {
+                const new_value = moment(value, 'YYYY-MM-DD HH:mm:ss');
+                if (new_value.isValid()) {
+                    json[prop] = new_value.format('DD/MM/YYYY HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(value, 'YYYY-MM-DD');
+                if (new_value.isValid()) {
+                    json[prop] = new_value.format('DD/MM/YYYY');
+                }
             }
         });
 
@@ -47,12 +53,63 @@ class BaseModel extends Model {
         Object.keys(this).forEach((value, index) => {
             const schema = propSchemas[value];
             const field = this[value];
-            const date = parse(field);
 
-            if (schema.format === 'date-time' && isValid(date)) {
-                this[value] = format(date, 'YYYY-MM-DD HH:mm:ss');
-            } else if (schema.format === 'date' && isValid(date)) {
-                this[value] = format(date, 'YYYY-MM-DD');
+            if (schema.format === 'date-time') {
+                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(field, 'DD/MM/YYYY');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD');
+                }
+            }
+        });
+    }
+
+    $afterInsert(queryContext) {
+        super.$afterInsert(queryContext);
+
+        const propSchemas = this.constructor.jsonSchema.properties;
+
+        Object.keys(this).forEach((value, index) => {
+            const schema = propSchemas[value];
+            const field = this[value];
+
+            if (schema.format === 'date-time') {
+                const new_value = moment(field);
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('DD-MM-YYYY HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(field);
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('DD/MM/YYYY');
+                }
+            }
+        });
+    }
+
+    $beforeUpdate(opt, queryContext) {
+        super.$beforeUpdate(opt, queryContext);
+
+        const propSchemas = this.constructor.jsonSchema.properties;
+
+        Object.keys(this).forEach((value, index) => {
+            const schema = propSchemas[value];
+            const field = this[value];
+
+            if (schema.format === 'date-time') {
+                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(field, 'DD/MM/YYYY');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD');
+                }
             }
         });
     }
@@ -61,14 +118,20 @@ class BaseModel extends Model {
         const object = {};
 
         const propSchemas = this.constructor.jsonSchema.properties;
+
         Object.entries(json).forEach(([idx, value]) => {
             const schema = propSchemas[idx];
-            const date = parse(value);
 
-            if (schema.format === 'date-time' && isValid(date)) {
-                object[idx] = date.toISOString();
-            } else if (schema.format === 'date' && isValid(date)) {
-                object[idx] = `${date.toISOString().split('T')[0]}`;
+            if (schema.format === 'date-time') {
+                const date = moment(value, 'DD/MM/YYYY HH:mm:ss');
+                if (date.isValid()) {
+                    object[idx] = date.toISOString();
+                }
+            } else if (schema.format === 'date') {
+                const date = moment(value, 'DD/MM/YYYY');
+                if (date.isValid()) {
+                    object[idx] = date.format('YYYY-MM-DD');
+                }
             } else {
                 object[idx] = value;
             }

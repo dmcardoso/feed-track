@@ -1,6 +1,7 @@
 module.exports = (app) => {
     const { BaseModel } = require('../config/database/base-model');
     const path = require('path');
+    const moment = require('moment');
 
     class Funcionarios extends BaseModel {
         static get tableName() {
@@ -14,14 +15,14 @@ module.exports = (app) => {
         static get jsonSchema() {
             return {
                 type: 'object',
-                required: ['nome', 'email', 'nascimento', 'senha', 'criacao'],
+                required: ['nome', 'email', 'senha', 'criacao'],
                 properties: {
                     id: { type: 'integer' },
                     nome: { type: 'string', minLength: 1, maxLength: 240 },
                     email: { type: 'email' },
                     nascimento: { type: 'string', format: 'date' },
                     senha: { type: 'string' },
-                    criacao: { type: 'string', format: 'date-time' },
+                    criacao: { type: 'string', format: 'date-time', default: moment().toISOString() },
                     desativado: { type: 'number' },
                 },
             };

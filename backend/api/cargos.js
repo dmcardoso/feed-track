@@ -30,17 +30,26 @@ module.exports = (app) => {
         res.json(cargos);
     };
 
-    const save = (req, res) => {
-        const { cargo } = req.body;
+    const save = async (req, res) => {
+        let { cargo } = req.body;
 
         if (req.params.id) cargo.id = Number(req.params.id);
 
         try {
-            if (cargo.descricao.trim() === '') {
-                throw Error('Descrição inválida!');
+            if (cargo.id === undefined && cargo.descricao.trim() === '') {
+                throw 'Descrição inválida!';
             }
         } catch (msg) {
             res.status(400).send(msg);
+        }
+
+        if (cargo.id) {
+            const cargo_database = await app.models.cargos.query().select('*').where('id', cargo.id).first();
+            if (cargo_database && cargo_database.id) {
+                cargo = Object.assign(cargo_database, cargo);
+            } else {
+                res.json({ message: 'Não foi possível atualizar cargo!' });
+            }
         }
 
         app.models.cargos.query().upsert(cargo).then((result) => {

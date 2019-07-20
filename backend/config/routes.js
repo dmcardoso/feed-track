@@ -19,9 +19,31 @@ module.exports = (app) => {
         .delete(api.feedbacks.softDelete)
         .get(api.feedbacks.select);
 
+    app.route('/filiais')
+        .get(api.filiais.select)
+        .post(api.filiais.save);
+
+    app.route('/filiais/:id')
+        .put(api.filiais.save)
+        .delete(api.filiais.softDelete)
+        .get(api.filiais.select);
+
     app.route('/funcionarios')
         .get(api.funcionarios.select)
         .post(api.funcionarios.save);
 
-    // app.get('/cargos', );
+    app.route('/funcionarios/:id')
+        .put(api.funcionarios.save)
+        .delete(api.funcionarios.softDelete)
+        .get(api.funcionarios.select);
+
+    app.route('/permissoes')
+        .get(api.permissoes.teste)
+        // .get(api.permissoes.select)
+        .post(api.permissoes.save);
+
+    app.route('/permissoes/:id')
+        .put(api.permissoes.save)
+        .delete(api.permissoes.softDelete)
+        .get(api.permissoes.select);
 };

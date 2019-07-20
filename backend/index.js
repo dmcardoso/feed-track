@@ -1,6 +1,8 @@
 const app = require('express')();
 const consign = require('consign');
-require('date-fns/locale/pt');
+const moment = require('moment');
+
+moment.locale('pt-BR');
 
 consign()
 // .include()

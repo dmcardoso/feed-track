@@ -23,6 +23,10 @@ module.exports = (app = null) => {
             };
         }
 
+        static async teste(params = null) {
+            return this.query().select('*');
+        }
+
         static get relationMappings() {
             /* eslint import/no-dynamic-require: 0 */
             const FuncionariosPermissoes = require(path.resolve(this.modelPaths, 'funcionarios-permissoes.js'));

@@ -1,6 +1,7 @@
 module.exports = (app) => {
     const { BaseModel } = require('../config/database/base-model');
     const path = require('path');
+    const moment = require('moment');
 
     class Feedbacks extends BaseModel {
         static get tableName() {
@@ -27,7 +28,7 @@ module.exports = (app) => {
                 properties: {
                     id: { type: 'integer' },
                     descricao: { type: 'string' },
-                    criacao: { type: 'string', format: 'date-time' },
+                    criacao: { type: 'string', format: 'date-time', default: moment().toISOString() },
                     vendas: { type: 'integer' },
                     cadastros: { type: 'integer' },
                     renovacoes: { type: 'integer' },
