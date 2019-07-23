@@ -18,10 +18,84 @@ class BaseModel extends Model {
         return path.resolve(__dirname, '../../models/');
     }
 
+    static get modifiers() {
+        return {
+            desativado(builder) {
+                builder.where('desativado', 0);
+            },
+        };
+    }
+
+    static getAction(action) {
+        switch (action) {
+            case 'insert':
+                return 'inserido';
+            case 'update':
+                return 'atualizado';
+            case 'delete':
+                return 'excluído';
+            default:
+                return 'no-action';
+        }
+    }
+
     $parseDatabaseJson(json) {
         /* eslint no-param-reassign: 0 */
         json = super.$parseDatabaseJson(json);
 
+        return this.mySQLToBr(json);
+    }
+
+    $beforeInsert(queryContext) {
+        super.$beforeInsert(queryContext);
+
+        this.brToMySQL();
+    }
+
+    $afterInsert(queryContext) {
+        super.$afterInsert(queryContext);
+
+        Object.assign(this, this.mySQLToBr(this));
+    }
+
+    $beforeUpdate(opt, queryContext) {
+        super.$beforeUpdate(opt, queryContext);
+
+        this.brToMySQL();
+    }
+
+    $afterUpdate(opt, queryContext) {
+        super.$afterUpdate(opt, queryContext);
+
+        Object.assign(this, this.mySQLToBr(this));
+    }
+
+    $parseJson(json, opt) {
+        return this.brToISOString(json);
+    }
+
+    brToMySQL() {
+        const propSchemas = this.constructor.jsonSchema.properties;
+
+        Object.keys(this).forEach((value) => {
+            const schema = propSchemas[value];
+            const field = this[value];
+
+            if (schema.format === 'date-time') {
+                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(field, 'DD/MM/YYYY');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD');
+                }
+            }
+        });
+    }
+
+    mySQLToBr(json) {
         const propSchemas = this.constructor.jsonSchema.properties;
 
         Object.keys(propSchemas).forEach((prop) => {
@@ -44,77 +118,7 @@ class BaseModel extends Model {
         return json;
     }
 
-
-    $beforeInsert(queryContext) {
-        super.$beforeInsert(queryContext);
-
-        const propSchemas = this.constructor.jsonSchema.properties;
-
-        Object.keys(this).forEach((value, index) => {
-            const schema = propSchemas[value];
-            const field = this[value];
-
-            if (schema.format === 'date-time') {
-                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
-                }
-            } else if (schema.format === 'date') {
-                const new_value = moment(field, 'DD/MM/YYYY');
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('YYYY-MM-DD');
-                }
-            }
-        });
-    }
-
-    $afterInsert(queryContext) {
-        super.$afterInsert(queryContext);
-
-        const propSchemas = this.constructor.jsonSchema.properties;
-
-        Object.keys(this).forEach((value, index) => {
-            const schema = propSchemas[value];
-            const field = this[value];
-
-            if (schema.format === 'date-time') {
-                const new_value = moment(field);
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('DD-MM-YYYY HH:mm:ss');
-                }
-            } else if (schema.format === 'date') {
-                const new_value = moment(field);
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('DD/MM/YYYY');
-                }
-            }
-        });
-    }
-
-    $beforeUpdate(opt, queryContext) {
-        super.$beforeUpdate(opt, queryContext);
-
-        const propSchemas = this.constructor.jsonSchema.properties;
-
-        Object.keys(this).forEach((value, index) => {
-            const schema = propSchemas[value];
-            const field = this[value];
-
-            if (schema.format === 'date-time') {
-                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
-                }
-            } else if (schema.format === 'date') {
-                const new_value = moment(field, 'DD/MM/YYYY');
-                if (new_value.isValid()) {
-                    this[value] = new_value.format('YYYY-MM-DD');
-                }
-            }
-        });
-    }
-
-    $parseJson(json, opt) {
+    brToISOString(json) {
         const object = {};
 
         const propSchemas = this.constructor.jsonSchema.properties;

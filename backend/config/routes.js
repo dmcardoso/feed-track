@@ -38,8 +38,7 @@ module.exports = (app) => {
         .get(api.funcionarios.select);
 
     app.route('/permissoes')
-        .get(api.permissoes.teste)
-        // .get(api.permissoes.select)
+        .get(api.permissoes.select)
         .post(api.permissoes.save);
 
     app.route('/permissoes/:id')

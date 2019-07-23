@@ -5,33 +5,24 @@ module.exports = (app) => {
         const search = req.query.search || null;
         const page = req.query.page || 1;
 
-        const query = app.models.cargos.query().select('*').where('desativado', 0);
+        const data = {
+            id,
+            limit,
+            search,
+            page,
+        };
 
-        if (id !== 0) {
-            query.where('id', id);
-        }
+        try {
+            const result = await app.models.cargos.get(data);
 
-        if (search !== null) {
-            query.where('descricao', 'like', `%${search}%`);
-        }
-
-        if (limit !== null) {
-            query.limit(limit);
-        }
-
-        if (page !== 1 && limit !== null) {
-            query.offset(page * limit - limit);
-        }
-
-        const cargos = await query.then().catch(() => {
+            res.json(result);
+        } catch (msg) {
             res.status(400).send('Bad request!');
-        });
-
-        res.json(cargos);
+        }
     };
 
     const save = async (req, res) => {
-        let { cargo } = req.body;
+        const { cargo } = req.body;
 
         if (req.params.id) cargo.id = Number(req.params.id);
 
@@ -39,44 +30,34 @@ module.exports = (app) => {
             if (cargo.id === undefined && cargo.descricao.trim() === '') {
                 throw 'Descrição inválida!';
             }
+
+            const result = await app.models.cargos.save(cargo);
+
+            if (result === true) {
+                res.sendStatus(204);
+            } else {
+                res.json(result);
+            }
         } catch (msg) {
             res.status(400).send(msg);
         }
-
-        if (cargo.id) {
-            const cargo_database = await app.models.cargos.query().select('*').where('id', cargo.id).first();
-            if (cargo_database && cargo_database.id) {
-                cargo = Object.assign(cargo_database, cargo);
-            } else {
-                res.json({ message: 'Não foi possível atualizar cargo!' });
-            }
-        }
-
-        app.models.cargos.query().upsert(cargo).then((result) => {
-            if (result) {
-                res.json(result);
-            } else {
-                res.sendStatus(204);
-            }
-        }).catch(() => {
-            res.status(400).send('Bad request!');
-        });
     };
 
     const softDelete = async (req, res) => {
         const { id } = req.params;
 
-        const cargo = await app.models.cargos.query().select('*').where('id', id).first();
+        const data = {
+            id,
+        };
 
-        if (cargo && cargo.id) {
-            cargo.desativado = 1;
-            app.models.cargos.query().soft(cargo).then(() => {
+        try {
+            const result = app.models.cargos.softDelete(data);
+
+            if (result) {
                 res.sendStatus(204);
-            }).catch(() => {
-                res.status(400).send('Bad request!');
-            });
-        } else {
-            res.json({ message: 'Não foi possível excluir cargo!' });
+            }
+        } catch (msg) {
+            res.status(400).send(msg);
         }
     };
 
