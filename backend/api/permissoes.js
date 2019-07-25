@@ -13,25 +13,26 @@ module.exports = (app) => {
         };
 
         try {
-            const result = await app.models.cargos.get(data);
+            const result = await app.models.permissoes.get(data);
 
             res.json(result);
         } catch (msg) {
-            res.status(400).send('Bad request!');
+            res.status(400).send('Bad request');
         }
     };
 
     const save = async (req, res) => {
-        const { cargo } = req.body;
+        const { permissao } = req.body;
 
-        if (req.params.id) cargo.id = Number(req.params.id);
+        if (req.params.id) permissao.id = Number(req.params.id);
 
         try {
-            if (cargo.id === undefined && cargo.descricao.trim() === '') {
+            if (permissao.id === undefined && permissao.permissao.trim() === '') {
+                // eslint-disable-next-line no-throw-literal
                 throw 'Descrição inválida!';
             }
 
-            const result = await app.models.cargos.save(cargo);
+            const result = await app.models.permissoes.save(permissao);
 
             if (result === true) {
                 res.sendStatus(204);
@@ -51,13 +52,13 @@ module.exports = (app) => {
         };
 
         try {
-            const result = app.models.cargos.softDelete(data);
+            const result = await app.models.permissoes.softDelete(data);
 
             if (result) {
                 res.sendStatus(204);
             }
         } catch (msg) {
-            res.status(400).send(msg);
+            res.sendStatus(400).send(msg);
         }
     };
 

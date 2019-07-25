@@ -1,10 +1,14 @@
-module.exports = (app = null) => {
+module.exports = (app) => {
     const { BaseModel } = require('../config/database/base-model');
     const path = require('path');
 
     class Permissoes extends BaseModel {
         static get tableName() {
             return 'permissoes';
+        }
+
+        static get labelName() {
+            return 'Permissão';
         }
 
         static get idColumn() {
@@ -18,6 +22,7 @@ module.exports = (app = null) => {
                 properties: {
                     id: { type: 'integer' },
                     permissao: { type: 'string', minLength: 1, maxLength: 240 },
+                    desativado: { type: 'number' },
                 },
             };
         }
@@ -25,6 +30,7 @@ module.exports = (app = null) => {
         static get relationMappings() {
             /* eslint import/no-dynamic-require: 0 */
             const FuncionariosPermissoes = require(path.resolve(this.modelPaths, 'funcionarios-permissoes.js'));
+            const SystemLogs = require(path.resolve(this.modelPaths, 'system-logs.js'));
 
             return {
                 funcionario_permissoes: {
@@ -39,7 +45,102 @@ module.exports = (app = null) => {
                         to: 'funcionarios.id',
                     },
                 },
+                system_logs: {
+                    relation: BaseModel.HasManyRelation,
+                    modelClass: SystemLogs,
+                    join: {
+                        from: 'permissoes.id',
+                        to: 'system_logs.referencia',
+                    },
+                },
+                inserted: {
+                    relation: BaseModel.BelongsToOneRelation,
+                    modelClass: SystemLogs,
+                    join: {
+                        from: 'permissoes.id',
+                        to: 'system_logs.referencia',
+                    },
+                },
+                updated: {
+                    relation: BaseModel.BelongsToOneRelation,
+                    modelClass: SystemLogs,
+                    join: {
+                        from: 'permissoes.id',
+                        to: 'system_logs.referencia',
+                    },
+                },
             };
+        }
+
+        static async get({
+            id, limit, search, page,
+        }) {
+            const query = this.query().select().where('permissoes.desativado', 0);
+
+            query.eagerAlgorithm(app.models.permissoes.JoinEagerAlgorithm)
+                .eager(`
+                    [inserted(permissoes, onlyInsert).funcionario(withOutPass),
+                    updated(permissoes, lastUpdate).funcionario(withOutPass)]
+                `);
+
+            if (id !== 0) {
+                query.where('permissoes.id', id);
+            } else {
+                query.orderBy('inserted.criacao', 'asc');
+            }
+
+            if (search !== null) {
+                query.where('permissao', 'like', `%${search}%`);
+            }
+
+            if (limit !== null) {
+                query.limit(limit);
+            }
+
+            if (page !== 1 && limit !== null) {
+                query.offset(page * limit - limit);
+            }
+
+            if (id !== 0) return query.first().then();
+            return query.then();
+        }
+
+        static async save(permissao) {
+            if (permissao.id) {
+                const permissao_database = await this.query()
+                    .select('*').where('id', permissao.id).first();
+
+                if (permissao_database && permissao_database.id) {
+                    // eslint-disable-next-line no-param-reassign
+                    permissao = Object.assign(permissao_database, permissao);
+                } else {
+                    // eslint-disable-next-line no-throw-literal
+                    throw 'Não foi possível atualizar permissao!';
+                }
+            }
+
+            return this.query()
+                .upsert(permissao)
+                .then((result) => {
+                    if (result) {
+                        return result;
+                    }
+                    return true;
+                })
+                .catch(() => 'Bad request!');
+        }
+
+        static async softDelete({ id }) {
+            const permissao = await this.query().select('*').where('id', id).first();
+
+            if (permissao && permissao.id) {
+                permissao.desativado = 1;
+                return this.query().soft(permissao)
+                    .then()
+                    .catch(() => 'Bad request!');
+            }
+            // eslint-disable-next-line no-throw-literal
+            throw 'Não foi possível excluir permissao!';
         }
     }
 

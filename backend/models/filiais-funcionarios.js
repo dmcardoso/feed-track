@@ -14,6 +14,7 @@ module.exports = (app) => {
                     filial: { type: 'number' },
                     funcionario: { type: 'number' },
                     cargo: { type: 'number' },
+                    desativado: { type: 'number' },
                 },
             };
         }

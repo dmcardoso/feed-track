@@ -13,6 +13,7 @@ module.exports = (app) => {
                 properties: {
                     funcionario: { type: 'number' },
                     permissao: { type: 'number' },
+                    desativado: { type: 'number' },
                 },
             };
         }

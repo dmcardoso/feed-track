@@ -1,11 +1,11 @@
-const {Model} = require('objection');
-const {argv} = require('yargs');
+const { Model } = require('objection');
+const { argv } = require('yargs');
 const path = require('path');
-const format = require('date-fns/format');
-const isValid = require('date-fns/is_valid');
-const parse = require('date-fns/parse');
+const moment = require('moment');
+
+moment.locale('pt-BR');
 const db = require('./db')(argv);
-const {QueryBuilder} = require('./query-builder');
+const { QueryBuilder } = require('./query-builder');
 
 Model.knex(db);
 
@@ -18,70 +18,124 @@ class BaseModel extends Model {
         return path.resolve(__dirname, '../../models/');
     }
 
+    static get modifiers() {
+        return {
+            desativado(builder) {
+                builder.where('desativado', 0);
+            },
+        };
+    }
+
+    static getAction(action) {
+        switch (action) {
+            case 'insert':
+                return 'inserido';
+            case 'update':
+                return 'atualizado';
+            case 'delete':
+                return 'excluído';
+            default:
+                return 'no-action';
+        }
+    }
+
     $parseDatabaseJson(json) {
         /* eslint no-param-reassign: 0 */
         json = super.$parseDatabaseJson(json);
 
+        return this.mySQLToBr(json);
+    }
+
+    $beforeInsert(queryContext) {
+        super.$beforeInsert(queryContext);
+
+        this.brToMySQL();
+    }
+
+    $afterInsert(queryContext) {
+        super.$afterInsert(queryContext);
+
+        Object.assign(this, this.mySQLToBr(this));
+    }
+
+    $beforeUpdate(opt, queryContext) {
+        super.$beforeUpdate(opt, queryContext);
+
+        this.brToMySQL();
+    }
+
+    $afterUpdate(opt, queryContext) {
+        super.$afterUpdate(opt, queryContext);
+
+        Object.assign(this, this.mySQLToBr(this));
+    }
+
+    $parseJson(json, opt) {
+        return this.brToISOString(json);
+    }
+
+    brToMySQL() {
+        const propSchemas = this.constructor.jsonSchema.properties;
+
+        Object.keys(this).forEach((value) => {
+            const schema = propSchemas[value];
+            const field = this[value];
+
+            if (schema.format === 'date-time') {
+                const new_value = moment(field, 'DD/MM/YYYY HH:mm:ss');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(field, 'DD/MM/YYYY');
+                if (new_value.isValid()) {
+                    this[value] = new_value.format('YYYY-MM-DD');
+                }
+            }
+        });
+    }
+
+    mySQLToBr(json) {
         const propSchemas = this.constructor.jsonSchema.properties;
 
         Object.keys(propSchemas).forEach((prop) => {
             const schema = propSchemas[prop];
             const value = json[prop];
 
-            if (schema.format === 'date-time' && value instanceof Date) {
-                json[prop] = format(value, 'DD/MM/YYYY HH:mm:ss');
-            } else if (schema.format === 'date' && value instanceof Date) {
-                json[prop] = format(value, 'DD/MM/YYYY');
+            if (schema.format === 'date-time') {
+                const new_value = moment(value, 'YYYY-MM-DD HH:mm:ss');
+                if (new_value.isValid()) {
+                    json[prop] = new_value.format('DD/MM/YYYY HH:mm:ss');
+                }
+            } else if (schema.format === 'date') {
+                const new_value = moment(value, 'YYYY-MM-DD');
+                if (new_value.isValid()) {
+                    json[prop] = new_value.format('DD/MM/YYYY');
+                }
             }
         });
 
         return json;
     }
 
-    $afterInsert(queryContext) {
-        // console.log('im in base');
-        // console.log(queryContext);
-        // console.log(this);
-    }
-
-    $beforeInsert(queryContext) {
-        super.$beforeInsert(queryContext);
+    brToISOString(json) {
+        const object = {};
 
         const propSchemas = this.constructor.jsonSchema.properties;
 
-        Object.keys(this).forEach((value, index) => {
-            const schema = propSchemas[value];
-            const field = this[value];
-            const date = parse(field);
-
-            if (schema.format === 'date-time' && isValid(date)) {
-                this[value] = format(date, 'YYYY-MM-DD HH:mm:ss');
-            } else if (schema.format === 'date' && isValid(date)) {
-                this[value] = format(date, 'YYYY-MM-DD');
-            }
-        });
-    }
-
-    static query(...args) {
-        const query = super.query(...args);
-
-        // Somehow modify the query.
-        return query.runAfter((result, queryBuilder) => {
-            console.log(queryBuilder.isInsert(), 'é insert?'); // Aqui retorna se é true para insert, tem o método isUpdate também
-            console.log(this.name, 'got result', result); // retorna o nome da model e o resultado da query
-            return result;
-        });
-    }
-
-    $parseJson(json, opt) {
-        const object = {};
-
         Object.entries(json).forEach(([idx, value]) => {
-            const date = parse(value);
-            if (isValid(date) && value.split(' ').length > 1) {
-                object[idx] = date.toISOString();
-            } else if (isValid(date)) {
-                object[idx] = `${date.toISOString().split('T')[0]}`;
+            const schema = propSchemas[idx];
+
+            if (schema.format === 'date-time') {
+                const date = moment(value, 'DD/MM/YYYY HH:mm:ss');
+                if (date.isValid()) {
+                    object[idx] = date.toISOString();
+                }
+            } else if (schema.format === 'date') {
+                const date = moment(value, 'DD/MM/YYYY');
+                if (date.isValid()) {
+                    object[idx] = date.format('YYYY-MM-DD');
+                }
             } else {
                 object[idx] = value;
             }
@@ -91,4 +145,4 @@ class BaseModel extends Model {
     }
 }
 
-module.exports = {BaseModel};
+module.exports = { BaseModel };
