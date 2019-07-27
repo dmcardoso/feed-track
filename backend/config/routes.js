@@ -42,6 +42,11 @@ module.exports = (app) => {
         .post(api.permissoes.save);
 
     app.route('/permissoes/:id')
+        // .all(function(req, res){
+        //     console.log(req.originalUrl);
+        //     console.log(req.route.path);
+        //     console.log(req.method);
+        // })
         .put(api.permissoes.save)
         .delete(api.permissoes.softDelete)
         .get(api.permissoes.select);

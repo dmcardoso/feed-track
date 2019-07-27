@@ -4,7 +4,7 @@
   "description": "Backend do sistema.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js  --mode dev",
+    "start-server": "nodemon index.js  --mode dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

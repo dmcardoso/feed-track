@@ -122,9 +122,7 @@ module.exports = (app) => {
         }
 
         static async save(cargo) {
-            let action = 'insert';
             if (cargo.id) {
-                action = 'update';
                 const cargo_database = await app.models.cargos.query().select('*').where('id', cargo.id).first();
                 if (cargo_database && cargo_database.id) {
                     // eslint-disable-next-line no-param-reassign
