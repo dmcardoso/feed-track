@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
+import { AppContext } from '../../main/App';
 
 import {
     Sidebar as Nav, Logo, UserImage, UserName, BottomSideBar,
@@ -8,8 +8,8 @@ import {
 import { Icon, Item, Description } from '../menu-sidebar/style';
 import MenuSideBar from '../menu-sidebar';
 
-function Sidebar(props) {
-    const { collapsed, changeCollapsed } = props;
+function Sidebar() {
+    const { changeCollapsed, collapsed } = useContext(AppContext);
 
     return (
         <Nav>
@@ -34,14 +34,5 @@ function Sidebar(props) {
         </Nav>
     );
 }
-
-Sidebar.propTypes = {
-    collapsed: PropTypes.string.isRequired,
-    changeCollapsed: PropTypes.func,
-};
-
-Sidebar.defaultProps = {
-    changeCollapsed: 'false',
-};
 
 export default Sidebar;

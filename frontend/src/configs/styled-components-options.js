@@ -5,6 +5,8 @@ const colors = {
     black: '#000',
     green: '#5EC394',
     grey: '#F5F6FA',
+    'grey-border': '#707070',
+    'grey-even-table': '#F8F8F8',
     'blue-dark': '#2B3252',
     red: '#BF3E3E',
     'blue=links': '#2929C6',

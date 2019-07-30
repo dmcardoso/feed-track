@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 
 import Input from '../input';
-import { AppContext } from '../../App';
+import { AppContext } from '../../main/App';
 
 import { StyledHeader, Icon } from './style';
 import { colors } from '../../configs/styled-components-options';
 
 
-function Header(props) {
+function Header() {
     const { changeTheme } = useContext(AppContext);
 
     return (

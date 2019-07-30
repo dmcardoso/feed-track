@@ -1,14 +1,20 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
-import { Main, Container } from './style';
+import { Container } from './style';
 import Header from '../header';
+import Routes from '../../main/Routes';
+import Sidebar from '../sidebar';
 
 function AppContainer() {
     return (
-        <Container>
-            <Header />
-            <Main />
-        </Container>
+        <BrowserRouter>
+            <Sidebar />
+            <Container>
+                <Header />
+                <Routes />
+            </Container>
+        </BrowserRouter>
     );
 }
 
