@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { parse } from '../../util/styled-components/font-size';
-import { textColor, colors } from '../../configs/styled-components-options';
+import {parse} from '../../util/styled-components/font-size';
+import {textColor, colors} from '../../configs/styled-components-options';
 
 
 const IconTag = props => (
-    <i className={props.className} />
+    <i className={props.className}/>
 );
 
 const List = styled('ul')`
@@ -27,10 +27,11 @@ const Item = styled('li')`
     align-items: center;
     display: flex;
     height: 45px;
+    position: relative;
     width: 100%;
     margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')}
-    border-style: solid;
-    border-bottom-width: ${props => (props.borderBottom ? '1px' : '0')};
+    border-style: ${props => (props.borderBottom ? 'solid' : null)};
+    border-bottom-width: ${props => (props.borderBottom ? `${props.borderBottom}px` : '0')};
     padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
     border-color: ${textColor};
     
@@ -59,8 +60,24 @@ const Description = styled('a')`
     font-weight: bold;
 `;
 
+const Submenu = styled('div')`
+    width: 200px;
+    height: 200px;
+    right: 0;
+    top: 0;
+    position: absolute;
+`;
+
+const SubmenuList = styled('ul')`
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 4px rgba(0,0,0,.2);
+    background: white;
+    color: black;
+`;
+
 export {
-    List, Item, Icon, Description,
+    List, Item, Icon, Description, Submenu, SubmenuList
 };
 
 IconTag.propTypes = {
