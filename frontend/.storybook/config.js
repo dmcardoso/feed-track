@@ -7,16 +7,12 @@ import GlobalStyle from "../src/configs/css-reset";
 
 const lightTheme = {
     name: "Light",
-    backgroundColor: "azure",
-    textColor: "dimgrey",
-    borderRadius: "30px",
+    mode: 'ligth'
 };
 
 const darkTheme = {
     name: "Dark",
-    backgroundColor: "black",
-    textColor: "seashell",
-    borderRadius: "100px",
+    mode: 'dark'
 };
 
 const themes = [lightTheme, darkTheme];
