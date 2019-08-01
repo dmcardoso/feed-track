@@ -5,8 +5,8 @@ import {parse} from '../../util/styled-components/font-size';
 import {textColor, colors} from '../../configs/styled-components-options';
 
 
-const IconTag = props => (
-    <i className={props.className}/>
+const IconTag = ({className, icon, ...props}) => (
+    <div className={className} {...props}/>
 );
 
 const List = styled('ul')`
@@ -28,7 +28,7 @@ const Item = styled('li')`
     display: flex;
     height: 45px;
     position: relative;
-    width: 100%;
+    width: fit-content;
     margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')}
     border-style: ${props => (props.borderBottom ? 'solid' : null)};
     border-bottom-width: ${props => (props.borderBottom ? `${props.borderBottom}px` : '0')};
@@ -37,7 +37,7 @@ const Item = styled('li')`
     
     :hover {
         a,
-        i {
+        [class^='icon-'] {
             color: ${colors.green};    
         }
     }
@@ -63,7 +63,7 @@ const Description = styled('a')`
 const Submenu = styled('div')`
     width: 200px;
     height: 200px;
-    right: 0;
+    left: 100%;
     top: 0;
     position: absolute;
 `;
