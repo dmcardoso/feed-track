@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import { parse } from '../../util/styled-components/font-size';
-import { textColor, colors } from '../../configs/styled-components-options';
+import { textColor, colors, backgroundColor } from '../../configs/styled-components-options';
 
 
 const IconTag = ({ className, icon, ...props }) => (
@@ -50,7 +50,7 @@ const item_style = css`
     margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')};
     padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
     position: relative;
-    width: fit-content;
+    width: ${props => (props.width ? props.width : 'fit-content')};
 `;
 
 const Icon = styled(IconTag)`
@@ -68,6 +68,7 @@ const Description = styled('a')`
     color: ${textColor};
     font-size: ${props => parse(props.font_size || 20)};
     font-weight: bold;
+    white-space: nowrap;
 `;
 
 const Submenu = styled('div')`
@@ -82,7 +83,8 @@ const Submenu = styled('div')`
 `;
 
 const SubmenuList = styled('ul')`
-    background: white;
+    background: ${backgroundColor};
+    border: ${props => ((props.theme.mode === 'dark') ? '1px solid white;' : 'null')};
     border-radius: 15px;
     box-shadow: 0 0 4px rgba(0,0,0,.2);
     color: black;
