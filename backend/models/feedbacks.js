@@ -95,7 +95,7 @@ module.exports = (app) => {
             };
         }
 
-        static get({
+        static async get({
             id,
             limit,
             search,
@@ -111,7 +111,7 @@ module.exports = (app) => {
         }) {
             const query = this.query().select().where('feedbacks.desativado', 0);
 
-            query.eagerAlgorithm(app.models.feedbacks.JoinEagerAlgorithm)
+            query.eagerAlgorithm(this.JoinEagerAlgorithm)
                 .eager(`
                     [funcionario_feedback(desativado), 
                     filial_feedback(desativado), 
@@ -196,8 +196,18 @@ module.exports = (app) => {
                 query.offset(page * limit - limit);
             }
 
-            if (id !== 0) return query.first().then();
-            return query.then();
+            if (id !== 0) {
+                return query.first().then();
+            }
+
+            const results = await query.then();
+
+            const total = await query.groupBy('id').resultSize();
+
+            return {
+                results,
+                total,
+            };
         }
 
         static async save(feedback) {

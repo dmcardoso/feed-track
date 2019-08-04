@@ -28,14 +28,14 @@ class BaseModel extends Model {
 
     static getAction(action) {
         switch (action) {
-            case 'insert':
-                return 'inserido';
-            case 'update':
-                return 'atualizado';
-            case 'delete':
-                return 'excluído';
-            default:
-                return 'no-action';
+        case 'insert':
+            return 'inserido';
+        case 'update':
+            return 'atualizado';
+        case 'delete':
+            return 'excluído';
+        default:
+            return 'no-action';
         }
     }
 

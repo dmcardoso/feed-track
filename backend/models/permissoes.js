@@ -101,8 +101,18 @@ module.exports = (app) => {
                 query.offset(page * limit - limit);
             }
 
-            if (id !== 0) return query.first().then();
-            return query.then();
+            if (id !== 0) {
+                return query.first().then();
+            }
+
+            const results = await query.then();
+
+            const total = await query.groupBy('id').resultSize();
+
+            return {
+                results,
+                total,
+            };
         }
 
         static async save(permissao) {
