@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
     Item, Icon, Description, Submenu, SubmenuList,
 } from './style';
 
+import {Link} from 'react-router-dom';
+
 function Menu(props) {
     const {
-        collapsed, icon, clickable, hoverable, hover_color, description, submenu, ...attrs
+        collapsed, icon, clickable, hoverable, hover_color, description, submenu, link, ...attrs
     } = props;
 
     const [submenuVisible, setSubmenuVisible] = useState(false);
@@ -46,16 +48,23 @@ function Menu(props) {
         },
     };
 
-    const events = (clickable) ? null : { ...hover_events };
+    const Component = link ? Link : Item;
+
+    const events = (clickable) ? null : {...hover_events};
+
+    if (link) {
+        attrs.to = link;
+        attrs.component = Link;
+    }
 
     return (
         <Item {...attrs} icon={icon} hover_color={hover_color} {...events} ref={itemRef}>
-            {icon && <Icon className={icon} onClick={e => clickable && handleClickOutside(e, true)} />}
+            {icon && <Icon className={icon} onClick={e => clickable && handleClickOutside(e, true)}/>}
             {collapsed === 'false' && <Description ref={descRef}>{description}</Description>}
             {submenuVisible && submenu.length > 0 && (
                 <Submenu>
                     <SubmenuList>
-                        {submenu.map(({ icon: icon_submenu, description: description_subitem, ...attrs_submenu }) => (
+                        {submenu.map(({icon: icon_submenu, description: description_subitem, ...attrs_submenu}) => (
                             <Item
                                 marginBottom={10}
                                 key={description_subitem}
@@ -63,7 +72,7 @@ function Menu(props) {
                                 height="auto"
                                 {...attrs_submenu}
                             >
-                                {icon_submenu && <Icon className={icon_submenu} width={27} margin_right={15} />}
+                                {icon_submenu && <Icon className={icon_submenu} width={27} margin_right={15}/>}
                                 <Description font_size={18}>{description_subitem}</Description>
                             </Item>
                         ))}
@@ -83,6 +92,7 @@ Menu.propTypes = {
     hover_color: PropTypes.string,
     description: PropTypes.string.isRequired,
     submenu: PropTypes.array,
+    link: PropTypes.string,
 };
 
 Menu.defaultProps = {
@@ -92,6 +102,7 @@ Menu.defaultProps = {
     hoverable: true,
     hover_color: null,
     submenu: [],
+    link: null,
 };
 
 export default Menu;

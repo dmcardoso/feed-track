@@ -16,6 +16,8 @@ function Sidebar() {
             description: (collapsed === 'true' ? '' : 'Filiais'),
             icon: 'icon-company',
             marginBottom: '10',
+            link: '/filiais',
+
             submenu: [
                 {
                     description: 'Editar',

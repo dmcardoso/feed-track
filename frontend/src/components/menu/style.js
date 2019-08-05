@@ -1,11 +1,13 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled, {css} from 'styled-components';
 import PropTypes from 'prop-types';
-import { parse } from '../../util/styled-components/font-size';
-import { textColor, colors, backgroundColor } from '../../configs/styled-components-options';
+import {parse} from '../../util/styled-components/font-size';
+import {textColor, colors, backgroundColor} from '../../configs/styled-components-options';
+
+import {Link} from 'react-router-dom';
 
 
-const IconTag = ({ className, icon, ...props }) => (
+const IconTag = ({className, icon, ...props}) => (
     <div className={className} {...props} />
 );
 
@@ -23,10 +25,11 @@ const List = styled('ul')`
     }
 `;
 
-const Item = styled('li')`
+const Item = styled(({component: Component, className, link, ...props}) =>
+    Component ? <Component to={link} className={className} {...props} /> : <li className={className} {...props}/>
+)`
     ${props => (props.circle ? circle : item_style)}
-    
-    
+        
     &:hover {
         > a,
         > [class^='icon-'] {
