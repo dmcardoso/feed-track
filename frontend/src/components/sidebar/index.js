@@ -5,7 +5,6 @@ import {
     Sidebar as Nav, Logo, UserImage, UserName, BottomSideBar,
 } from './style';
 
-import { Icon, Item, Description } from '../menu/style';
 import Menu from '../menu';
 
 function Sidebar() {
@@ -17,7 +16,7 @@ function Sidebar() {
             icon: 'icon-company',
             marginBottom: '10',
             link: '/filiais',
-
+            // clickable: true,
             submenu: [
                 {
                     description: 'Editar',
@@ -51,20 +50,28 @@ function Sidebar() {
             <Logo />
             {collapsed === 'false' && <UserImage />}
             {collapsed === 'false' && <UserName>Daniel</UserName>}
-            <Item marginBottom={collapsed === 'true' ? 75 : 50}>
-                <Icon className="icon-man-user" />
-                {collapsed === 'false' && <Description>Perfil</Description>}
-            </Item>
+            <Menu
+                marginBottom={collapsed === 'true' ? 75 : 50}
+                icon="icon-man-user"
+                as="div"
+                description={collapsed === 'true' ? null : 'Perfil'}
+            />
             {menu_itens.map(item => <Menu {...item} key={item.icon} />)}
             <BottomSideBar>
-                <Item borderBottom={1} width="100%" marginBottom={27.5}>
-                    <Icon className="icon-logout" />
-                    {collapsed === 'false' && <Description>Sair</Description>}
-                </Item>
-                <Item onClick={changeCollapsed}>
-                    <Icon className={collapsed === 'false' ? 'icon-sidebar-close' : 'icon-sidebar-open'} />
-                    {collapsed === 'false' && <Description>Fechar</Description>}
-                </Item>
+                <Menu
+                    description={collapsed === 'true' ? null : 'Sair'}
+                    borderBottom={1}
+                    as="div"
+                    width="100%"
+                    marginBottom={27.5}
+                    icon="icon-logout"
+                />
+                <Menu
+                    onClick={changeCollapsed}
+                    as="div"
+                    description={collapsed === 'true' ? null : 'Fechar'}
+                    icon={collapsed === 'false' ? 'icon-sidebar-close' : 'icon-sidebar-open'}
+                />
             </BottomSideBar>
         </Nav>
     );

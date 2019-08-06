@@ -1,13 +1,11 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
-import PropTypes from 'prop-types';
-import {parse} from '../../util/styled-components/font-size';
-import {textColor, colors, backgroundColor} from '../../configs/styled-components-options';
-
-import {Link} from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
+import { parse } from '../../util/styled-components/font-size';
+import { textColor, colors, backgroundColor } from '../../configs/styled-components-options';
 
 
-const IconTag = ({className, icon, ...props}) => (
+const IconTag = ({ className, icon, ...props }) => (
     <div className={className} {...props} />
 );
 
@@ -25,11 +23,27 @@ const List = styled('ul')`
     }
 `;
 
-const Item = styled(({component: Component, className, link, ...props}) =>
-    Component ? <Component to={link} className={className} {...props} /> : <li className={className} {...props}/>
-)`
-    ${props => (props.circle ? circle : item_style)}
-        
+const Container = styled('div')`
+    border-bottom-width: ${props => (props.borderBottom ? `${props.borderBottom}px` : '0')};
+    border-color: ${textColor};
+    border-style: ${props => (props.borderBottom ? 'solid' : null)};
+    display: flex;
+    height: ${props => (props.icon ? (props.height ? props.height : '45px') : 'auto')};
+    margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')};
+    padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
+    position: relative;
+    width: ${props => (props.width ? props.width : 'fit-content')};
+`;
+
+const item_style = css`
+    align-items: center;
+    border-bottom-width: ${props => (props.borderBottom ? `${props.borderBottom}px` : '0')};
+    border-color: ${textColor};
+    border-style: ${props => (props.borderBottom ? 'solid' : null)};
+    display: flex;
+    margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')};
+    padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
+
     &:hover {
         > a,
         > [class^='icon-'] {
@@ -42,19 +56,14 @@ const Item = styled(({component: Component, className, link, ...props}) =>
     }
 `;
 
-const item_style = css`
-    align-items: center;
-    border-bottom-width: ${props => (props.borderBottom ? `${props.borderBottom}px` : '0')};
-    border-color: ${textColor};
-    border-style: ${
-    props => (props.borderBottom ? 'solid' : null)};
-    display: flex;
-    height: ${props => (props.icon ? (props.height ? props.height : '45px') : 'auto')};
-    margin-bottom: ${props => ((props.marginBottom) ? `${props.marginBottom}px` : '0')};
-    padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
-    position: relative;
-    width: ${props => (props.width ? props.width : 'fit-content')};
+const Item = styled('div')`
+    ${props => (props.circle ? circle : item_style)}
 `;
+
+const StyledLink = styled(Link)`
+    ${item_style};
+`;
+
 
 const Icon = styled(IconTag)`
     color: ${textColor};
@@ -114,10 +123,5 @@ const circle = css`
 `;
 
 export {
-    List, Item, Icon, Description, Submenu, SubmenuList,
-};
-
-IconTag.propTypes = {
-    className: PropTypes.string,
-    marginBottom: PropTypes.string,
+    List, Item, Icon, Description, Submenu, SubmenuList, StyledLink, Container,
 };

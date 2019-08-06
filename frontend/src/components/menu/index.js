@@ -1,14 +1,13 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Item, Icon, Description, Submenu, SubmenuList,
+    Item, Icon, Description, Submenu, SubmenuList, StyledLink, Container,
 } from './style';
 
-import {Link} from 'react-router-dom';
 
 function Menu(props) {
     const {
-        collapsed, icon, clickable, hoverable, hover_color, description, submenu, link, ...attrs
+        collapsed, icon, clickable, hoverable, hover_color, description, submenu, as, link, ...attrs
     } = props;
 
     const [submenuVisible, setSubmenuVisible] = useState(false);
@@ -41,30 +40,32 @@ function Menu(props) {
 
     const hover_events = {
         onMouseEnter() {
-            toggleVisible(submenuVisible);
+            toggleVisible(false);
         },
         onMouseLeave() {
-            toggleVisible(submenuVisible);
+            toggleVisible(true);
         },
     };
 
-    const Component = link ? Link : Item;
+    const events = (clickable && !link) ? null : { ...hover_events };
 
-    const events = (clickable) ? null : {...hover_events};
+    const item_attrs = {
+        hover_color,
+        to: link,
+    };
 
-    if (link) {
-        attrs.to = link;
-        attrs.component = Link;
-    }
+    const Component = link ? StyledLink : Item;
 
     return (
-        <Item {...attrs} icon={icon} hover_color={hover_color} {...events} ref={itemRef}>
-            {icon && <Icon className={icon} onClick={e => clickable && handleClickOutside(e, true)}/>}
-            {collapsed === 'false' && <Description ref={descRef}>{description}</Description>}
+        <Container {...attrs} icon={icon} {...events} as={as}>
+            <Component {...item_attrs} ref={itemRef}>
+                {icon && <Icon className={icon} onClick={e => clickable && handleClickOutside(e, true)} />}
+                {collapsed === 'false' && <Description ref={descRef}>{description}</Description>}
+            </Component>
             {submenuVisible && submenu.length > 0 && (
                 <Submenu>
                     <SubmenuList>
-                        {submenu.map(({icon: icon_submenu, description: description_subitem, ...attrs_submenu}) => (
+                        {submenu.map(({ icon: icon_submenu, description: description_subitem, ...attrs_submenu }) => (
                             <Item
                                 marginBottom={10}
                                 key={description_subitem}
@@ -72,7 +73,7 @@ function Menu(props) {
                                 height="auto"
                                 {...attrs_submenu}
                             >
-                                {icon_submenu && <Icon className={icon_submenu} width={27} margin_right={15}/>}
+                                {icon_submenu && <Icon className={icon_submenu} width={27} margin_right={15} />}
                                 <Description font_size={18}>{description_subitem}</Description>
                             </Item>
                         ))}
@@ -80,7 +81,7 @@ function Menu(props) {
                 </Submenu>
             )
             }
-        </Item>
+        </Container>
     );
 }
 
@@ -93,6 +94,7 @@ Menu.propTypes = {
     description: PropTypes.string.isRequired,
     submenu: PropTypes.array,
     link: PropTypes.string,
+    as: PropTypes.string,
 };
 
 Menu.defaultProps = {
@@ -103,6 +105,7 @@ Menu.defaultProps = {
     hover_color: null,
     submenu: [],
     link: null,
+    as: 'li',
 };
 
 export default Menu;
