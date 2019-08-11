@@ -46,11 +46,17 @@ const Button = styled('div')`
         if (props.disabled) {
             return '#eee;';
         }
+        if (props.separator) {
+            return null;
+        }
         return colors.green;
     }};
         color: ${(props) => {
         if (props.disabled) {
             return '#9a9a9a;';
+        }
+        if (props.separator) {
+            return null;
         }
         return colors.white;
     }};
