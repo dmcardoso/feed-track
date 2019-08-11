@@ -8,8 +8,8 @@ module.exports = (app) => {
         const filial = req.query.filial || null;
         const fundacao = req.query.fundacao || null;
 
-        const limit = req.query.limit || null;
-        const page = req.query.page || 1;
+        const limit = Number(req.query.limit) || null;
+        const page = Number(req.query.page) || 1;
 
         const data = {
             id,
@@ -25,6 +25,7 @@ module.exports = (app) => {
 
             res.json(result);
         } catch (msg) {
+            console.log(msg);
             res.status(400).send('Bad request');
         }
     };

@@ -34,5 +34,6 @@ module.exports = {
         "better-styled-components/sort-declarations-alphabetically": 2,
         "react/jsx-filename-extension": [0],
         "react/jsx-indent-props": [0],
+        "react-hooks/exhaustive-deps": [0]
     },
 };
