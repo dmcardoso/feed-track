@@ -32,7 +32,17 @@ const Button = styled('div')`
 
         return colors.black;
     }};
-    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+    cursor: ${(props) => {
+        if (props.disabled) {
+            return 'not-allowed';
+        }
+        if (props.separator) {
+            return 'normal';
+        }
+
+        return 'pointer';
+    }
+};
     display: flex;
     font-size: 16px;
     font-weight: bold;

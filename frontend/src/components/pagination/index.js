@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import PropTypes from 'prop-types';
 import { Container, Button } from './style';
 import { makePagination } from './util';
@@ -60,12 +60,3 @@ Pagination.defaultProps = {
 };
 
 export default Pagination;
-// {visiblePages.map((this_page, index, array) => (
-//     <Button
-//         key={this_page}
-//         active={page === this_page}
-//         onClick={() => changePage(this_page)}
-//     >
-//         {array[index - 1] + 2 < this_page ? `...${this_page}` : this_page}
-//     </Button>
-// ))}
