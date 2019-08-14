@@ -1,13 +1,13 @@
 import React from 'react';
-import { Formik, Field } from 'formik';
+import {Formik, Field} from 'formik';
 import * as Yup from 'yup';
-import { Main, MainContainer } from '../../components/app-container/style';
+import {Main, MainContainer} from '../../components/app-container/style';
 
 import ControlledInput from '../../components/controlled-input';
-import StyledDatePicker from '../../components/form-components/date-picker';
+import ControlledDatePicker from '../../components/controlled-date-picker';
 
 function Form(props) {
-    function makeForm({ handleSubmit }) {
+    function makeForm({handleSubmit}) {
         return (
             <form onSubmit={handleSubmit}>
                 <Field
@@ -18,6 +18,12 @@ function Form(props) {
                     label="Filial"
                     placeholder="Nome da Filial"
                     component={ControlledInput}
+                />
+                <Field
+                    name="fundacao"
+                    id="fundacao"
+                    label="Fundação"
+                    component={ControlledDatePicker}
                 />
 
 
@@ -30,25 +36,16 @@ function Form(props) {
         <Main>
             <MainContainer>
                 <div>Filial</div>
-                <StyledDatePicker
-                    calendarAriaLabel="Testeeee"
-                    clearAriaLabel="Limpar"
-                    dayAriaLabel="Dia"
-                    format="dd/MM/yy"
-                    label="Oloco"
-                    calendarIcon={null}
-                    clearIcon={null}
-                    icon="icon-calendar"
-                    value={new Date()}
-                    onChange={date => console.log(date.toLocaleDateString())}
-                />
                 <Formik
                     validationSchema={Yup.object({
                         filial: Yup.string()
                             .required('Filial é obrigatório!'),
+                        fundacao: Yup.date('Data de fundação inválida')
+                            .required('Fundacao é obrigatório!')
                     })}
                     initialValues={{
                         filial: '',
+                        fundacao: null
                     }}
                     onSubmit={(values, actions) => {
                         console.log(values, actions);

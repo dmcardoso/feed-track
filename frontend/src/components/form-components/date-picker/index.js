@@ -1,24 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    StyledDatePicker, Container, Label, InputContainer, ErrorMessage, Icon
+    StyledDatePicker
 } from './style';
+import {Container, Label, InputContainer, ErrorMessage, Icon} from '../common-style.js';
 
 function DatePicker({
-    width, height, icon, label, error_message, name, id, margin, ...attrs
-}) {
+                        width, height, icon, label, error_message, name, id, margin, ...attrs
+                    }) {
     const show_icon = icon !== null;
     const show_label = label !== null;
     const show_error = error_message !== null;
 
-    console.log(icon);
+    const input_attrs = {
+        name,
+        id: id || name,
+        show_icon,
+        show_error,
+        format:"dd/MM/yy",
+        calendarIcon:null,
+        clearIcon:null,
+        ...attrs,
+    };
 
     return (
         <Container width={width} margin={margin}>
             {show_label && <Label htmlFor={id || name}>{label}</Label>}
             <InputContainer height={height}>
-                {show_icon && <Icon className={icon} />}
-                <StyledDatePicker {...attrs} />
+                {show_icon && <Icon className={icon}/>}
+                <StyledDatePicker {...input_attrs}/>
             </InputContainer>
             {show_error && <ErrorMessage title={error_message}>{error_message}</ErrorMessage>}
         </Container>
@@ -37,7 +47,8 @@ DatePicker.propTypes = {
 
 DatePicker.defaultProps = {
     width: '100%',
-    icon: null,
+    height: '60px',
+    icon: 'icon-calendar',
     id: null,
     margin: null,
     error_message: null,

@@ -16,7 +16,7 @@ const StyledInput = styled('input').attrs((props => ({
     font-weight: bold;
     padding: ${props => (props.show_icon ? '20px 20px 20px 62px' : '20px')};
     width: 100%;
-    transition: .2s;       
+    transition: .2s;
     
     :focus {
         border: 1px solid ${colors.green};
@@ -24,58 +24,6 @@ const StyledInput = styled('input').attrs((props => ({
     }
 `;
 
-const Label = styled('label')`
-    font-size: ${parse(18)};
-    font-weight: bold;
-    margin-bottom: 5px;
-`;
-
-const InputContainer = styled('div')`
-    height: ${props => props.height};
-    position: relative;
-    width: 100%;
-`;
-
-const Container = styled('div')`
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    margin: ${props => props.margin};
-    position: relative;
-    width: ${props => props.width};
-`;
-
-const IconTag = props => (
-    <i className={props.className} />
-);
-
-const Icon = styled(IconTag)`
-    color: ${colors.black};
-    height: 27px;
-    left: 20px;
-    margin-right: 20px;
-    position: absolute;
-    top: calc(50% - (27px / 2));
-    width: 27px;
-    
-    ::before{
-        font-size: 27px;
-    }
-`;
-
-const ErrorMessage = styled('span')`
-    bottom: -22px;
-    color: ${colors.red};
-    font-size: ${parse(16)};
-    left: 0;
-    overflow: hidden;
-    position: absolute;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-`;
-
-
 export {
-    StyledInput, Container, Icon, InputContainer, Label, ErrorMessage,
+    StyledInput
 };
