@@ -45,7 +45,7 @@ const item_style = css`
     padding-bottom: ${props => (props.borderBottom ? '37.5px' : '0')};
 
     &:hover {
-        > a,
+        > span,
         > [class^='icon-'] {
             color: ${props => (props.hover_color ? props.hover_color : colors.green)};    
         }
@@ -76,7 +76,7 @@ const Icon = styled(IconTag)`
     }
 `;
 
-const Description = styled('a')`
+const Description = styled('span')`
     color: ${textColor};
     font-size: ${props => parse(props.font_size || 20)};
     font-weight: bold;
@@ -116,7 +116,7 @@ const circle = css`
     position: relative;
     width: 32px;
     
-    > a {
+    > span {
         height: 13px;
         line-height: 5px;
     }

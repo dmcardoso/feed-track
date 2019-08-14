@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import Input from '../input';
+import Input from '../form-components/input';
 import { AppContext } from '../../main/App';
 
 import { StyledHeader, Icon } from './style';

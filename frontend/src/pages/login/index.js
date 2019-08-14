@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Container, LoginContainer, Logo } from './style';
-import Input from '../input';
-import Button from '../button';
-import CheckBox from '../checkbox';
+import Input from '../../components/form-components/input';
+import Button from '../../components/button';
+import CheckBox from '../../components/form-components/checkbox';
 
 function Login() {
     return (
