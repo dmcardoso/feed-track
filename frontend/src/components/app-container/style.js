@@ -3,6 +3,7 @@ import {
     widthSideBar,
     backgroundColorMain,
 } from '../../configs/styled-components-options';
+import { parse } from '../../util/styled-components/font-size';
 
 const Main = styled('main')`
     background-color: ${backgroundColorMain};
@@ -25,4 +26,13 @@ const Container = styled('div')`
     width: calc(100% - ${widthSideBar});
 `;
 
-export { Main, Container, MainContainer };
+const Title = styled('h1')`
+    display: flex;
+    font-size: ${parse(32)};
+    font-weight: bold;
+    margin-bottom: 50px;
+`;
+
+export {
+    Main, Container, MainContainer, Title,
+};

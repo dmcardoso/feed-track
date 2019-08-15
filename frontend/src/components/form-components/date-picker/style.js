@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import DatePicker from 'react-date-picker';
-import React from 'react';
 import { colors } from '../../../configs/styled-components-options';
 import { parse } from '../../../util/styled-components/font-size';
 
@@ -21,7 +20,12 @@ const StyledDatePicker = styled(DatePicker)`
         width: 100%;
         
         .react-date-picker__inputGroup {
-            padding: ${props => (props.show_icon ? '20px 20px 20px 62px' : '20px')};   
+            padding: ${props => (props.show_icon ? '20px 20px 20px 62px' : '20px')};
+        }
+        
+        .react-date-picker__clear-button {
+            position: relative;
+            width: 27px;
         }
     }
     

@@ -20,8 +20,8 @@ function DatePicker({
         show_icon,
         show_error,
         format: 'dd/MM/yy',
-        calendarIcon: null,
-        clearIcon: null,
+        calendarIcon: <Icon className={icon} />,
+        clearIcon: <Icon className="icon-cancel" cancelDatePicker />,
         ...attrs,
     };
 
@@ -29,7 +29,6 @@ function DatePicker({
         <Container width={width} margin={margin}>
             {show_label && <Label htmlFor={id || name}>{label}</Label>}
             <InputContainer height={height}>
-                {show_icon && <Icon className={icon} />}
                 <StyledDatePicker {...input_attrs} />
             </InputContainer>
             {show_error && <ErrorMessage title={error_message}>{error_message}</ErrorMessage>}

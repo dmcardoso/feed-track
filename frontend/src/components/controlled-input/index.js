@@ -19,7 +19,7 @@ function ControlledInput({
                 field.onChange(event);
             }
 
-            if (type === 'date' && event)form.setFieldValue(name, event);
+            if (type === 'date')form.setFieldValue(name, event);
         },
         onBlur(event) {
             if (onBlur) {
@@ -46,6 +46,10 @@ function ControlledInput({
 
     if (errors[name] && touched[name]) {
         field_props.error_message = errors[name];
+    }
+
+    if (type !== 'date') {
+        field_props.type = type;
     }
 
     return (
@@ -90,7 +94,7 @@ ControlledInput.defaultProps = {
     width: '100%',
     height: '60px',
     type: 'text',
-    margin: '0 0 21px 0',
+    margin: '0 0 31px 0',
     background_color: 'white',
 };
 

@@ -76,6 +76,24 @@ const buttonStyle = theme.variants('mode', 'kind', {
         `,
         dark: '#123456',
     },
+    disabled: {
+        light: css`
+            background-color: #F4F3F3;    
+            color: #9D9D9D;
+            
+            &:hover{
+                cursor: unset;
+            }
+        `,
+        dark: css`
+            background-color: #F4F3F3;    
+            color: #9D9D9D;
+            
+            &:hover{
+                cursor: unset;
+            }
+        `,
+    },
     login: {
         light: css`
             background-color: ${colors.white};

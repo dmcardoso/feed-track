@@ -13,7 +13,7 @@ function Button(props) {
 
 Button.propTypes = {
     label: PropTypes.string.isRequired,
-    kind: PropTypes.oneOf(['default', 'save', 'cancel']),
+    kind: PropTypes.oneOf(['default', 'save', 'cancel', 'disabled']),
 };
 
 Button.defaultProps = {
