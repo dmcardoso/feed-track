@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    StyledInput
+    StyledInput,
 } from './style';
 
-import {Container, Label, InputContainer, ErrorMessage, Icon} from '../common-style.js';
+import {
+    Container, Label, InputContainer, ErrorMessage, Icon,
+} from '../common-style.js';
 
 function Input({
     width, height, type, icon, label, error_message, name, id, margin, ...attrs

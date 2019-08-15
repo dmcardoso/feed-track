@@ -1,13 +1,12 @@
 import React from 'react';
-import {Formik, Field} from 'formik';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import {Main, MainContainer} from '../../components/app-container/style';
+import { Main, MainContainer } from '../../components/app-container/style';
 
 import ControlledInput from '../../components/controlled-input';
-import ControlledDatePicker from '../../components/controlled-date-picker';
 
 function Form(props) {
-    function makeForm({handleSubmit}) {
+    function makeForm({ handleSubmit }) {
         return (
             <form onSubmit={handleSubmit}>
                 <Field
@@ -23,10 +22,9 @@ function Form(props) {
                     name="fundacao"
                     id="fundacao"
                     label="Fundação"
-                    component={ControlledDatePicker}
+                    type="date"
+                    component={ControlledInput}
                 />
-
-
                 <button type="submit">Enviar</button>
             </form>
         );
@@ -41,11 +39,11 @@ function Form(props) {
                         filial: Yup.string()
                             .required('Filial é obrigatório!'),
                         fundacao: Yup.date('Data de fundação inválida')
-                            .required('Fundacao é obrigatório!')
+                            .required('Fundacao é obrigatório!'),
                     })}
                     initialValues={{
                         filial: '',
-                        fundacao: null
+                        fundacao: null,
                     }}
                     onSubmit={(values, actions) => {
                         console.log(values, actions);

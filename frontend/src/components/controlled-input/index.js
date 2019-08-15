@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../form-components/input';
+import DatePicker from '../form-components/date-picker';
 
 function ControlledInput({
-    children, id, field, form, onChange, onBlur, width, height, margin, background_color, ...props
+    children, id, field, form, onChange, onBlur, width, height, margin, background_color, type, ...props
 }) {
     const { name, value } = field;
     const { errors, touched } = form;
@@ -17,6 +18,8 @@ function ControlledInput({
             if (field.onChange) {
                 field.onChange(event);
             }
+
+            if (type === 'date' && event)form.setFieldValue(name, event);
         },
         onBlur(event) {
             if (onBlur) {
@@ -46,9 +49,22 @@ function ControlledInput({
     }
 
     return (
-        <Input
-            {...field_props}
-        />
+        <>
+            {(() => {
+                if (type === 'date') {
+                    return (
+                        <DatePicker
+                            {...field_props}
+                        />
+                    );
+                }
+                return (
+                    <Input
+                        {...field_props}
+                    />
+                );
+            })()}
+        </>
     );
 }
 
@@ -59,6 +75,7 @@ ControlledInput.propTypes = {
     form: PropTypes.object.isRequired,
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
+    type: PropTypes.string,
     width: PropTypes.string,
     height: PropTypes.string,
     margin: PropTypes.string,
@@ -72,6 +89,7 @@ ControlledInput.defaultProps = {
     onBlur: null,
     width: '100%',
     height: '60px',
+    type: 'text',
     margin: '0 0 21px 0',
     background_color: 'white',
 };
