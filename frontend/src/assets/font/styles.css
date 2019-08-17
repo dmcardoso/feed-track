@@ -95,3 +95,18 @@
 .icon-sun:before {
   content: "\73";
 }
+.icon-register:before {
+  content: "\74";
+}
+.icon-description:before {
+  content: "\75";
+}
+.icon-refresh:before {
+  content: "\76";
+}
+.icon-renovation:before {
+  content: "\77";
+}
+.icon-sell:before {
+  content: "\78";
+}

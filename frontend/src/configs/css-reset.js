@@ -23,6 +23,12 @@ const GlobalStyle = createGlobalStyle`
         border: none;
     }
     
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button,
+    input[type="number"]{
+        appearance: textfield;
+    }
+    
     :before,
     :after {
         box-sizing: border-box;
@@ -36,6 +42,10 @@ const GlobalStyle = createGlobalStyle`
     input[type="password"],
     textarea {
         font-family: ${font_family};
+    }
+    
+    textarea {
+        resize: none;
     }
     
     /*Auto clear*/

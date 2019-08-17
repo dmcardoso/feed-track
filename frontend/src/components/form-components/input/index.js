@@ -6,7 +6,7 @@ import {
 
 import {
     Container, Label, InputContainer, ErrorMessage, Icon,
-} from '../common-style.js';
+} from '../common-style';
 
 function Input({
     width, height, type, icon, label, error_message, name, id, margin, ...attrs

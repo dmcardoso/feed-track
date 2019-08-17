@@ -3,31 +3,41 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { Main, MainContainer, Title } from '../../components/app-container/style';
 import api from '../../services/api';
+import { Row, FieldContainer } from '../common-styles';
 
 import ControlledInput from '../../components/controlled-input';
 import Button from '../../components/button';
+import {datePickerDateParser} from "../../util/date-picker-parser";
 
 function Form(props) {
     function makeForm({ handleSubmit, isSubmitting, ...props }) {
         return (
             <form onSubmit={handleSubmit}>
-                <Field
-                    type="text"
-                    icon="icon-company"
-                    name="filial"
-                    id="filial"
-                    label="Filial"
-                    placeholder="Nome da Filial"
-                    component={ControlledInput}
-                />
-                <Field
-                    name="fundacao"
-                    id="fundacao"
-                    label="Fundação"
-                    type="date"
-                    component={ControlledInput}
-                />
-                <Button type="submit" kind={isSubmitting ? 'disabled' : 'save'} label="Enviar" />
+                <Row>
+                    <FieldContainer size={3}>
+                        <Field
+                            type="text"
+                            icon="icon-company"
+                            name="filial"
+                            id="filial"
+                            label="Filial"
+                            placeholder="Nome da Filial"
+                            component={ControlledInput}
+                        />
+                    </FieldContainer>
+                    <FieldContainer size={3}>
+                        <Field
+                            name="fundacao"
+                            id="fundacao"
+                            label="Fundação"
+                            type="date"
+                            component={ControlledInput}
+                        />
+                    </FieldContainer>
+                </Row>
+                <Row align="flex-end">
+                    <Button type="submit" kind={isSubmitting ? 'disabled' : 'save'} label="Enviar" />
+                </Row>
             </form>
         );
     }
@@ -55,10 +65,8 @@ function Form(props) {
                         if (
                             filial.fundacao
                             && filial.fundacao !== ''
-                            && filial.fundacao instanceof Date
-                            && !isNaN(filial.fundacao)
                         ) {
-                            filial.fundacao = filial.fundacao.toLocaleDateString();
+                            filial.fundacao = datePickerDateParser(filial.fundacao);
                         }
 
                         const result = await api.post('/filiais', {

@@ -21,7 +21,7 @@ function DatePicker({
         show_error,
         format: 'dd/MM/yy',
         calendarIcon: <Icon className={icon} />,
-        clearIcon: <Icon className="icon-cancel" cancelDatePicker />,
+        clearIcon: attrs.value ? <Icon className="icon-cancel" cancelDatePicker /> : null,
         ...attrs,
     };
 

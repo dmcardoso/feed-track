@@ -1,5 +1,4 @@
-import styled  from 'styled-components';
-import logo from '../../assets/img/logo.png';
+import styled from 'styled-components';
 import user from '../../assets/img/user.png';
 import { parse } from '../../util/styled-components/font-size';
 import {
@@ -18,9 +17,8 @@ const Sidebar = styled('nav')`
     width: ${widthSideBar};
 `;
 
-const Logo = styled('a')`
+const Logo = styled('img')`
     align-self: center;
-    background: url(${logo}) center / cover no-repeat;
     height: 47px;
     margin-bottom: ${marginBottomCollapsedSideBar};
     width: 57px;

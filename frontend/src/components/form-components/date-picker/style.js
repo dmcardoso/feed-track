@@ -14,6 +14,10 @@ const StyledDatePicker = styled(DatePicker)`
     height: 100%;
     width: 100%;
     
+    :hover {
+        border: 1px solid hsl(0,0%,70%);
+    }
+    
     .react-date-picker__wrapper {
         border: unset;
         height: 100%;

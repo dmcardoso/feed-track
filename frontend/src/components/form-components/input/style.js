@@ -18,6 +18,10 @@ const StyledInput = styled('input').attrs((props => ({
     width: 100%;
     transition: .2s;
     
+    :hover {
+        border: 1px solid hsl(0,0%,70%);
+    }
+    
     :focus {
         border: 1px solid ${colors.green};
         transition: .2s;       
@@ -25,5 +29,5 @@ const StyledInput = styled('input').attrs((props => ({
 `;
 
 export {
-    StyledInput
+    StyledInput,
 };

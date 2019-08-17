@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../main/App';
+import logo from '../../assets/img/logo.png';
 
 import {
     Sidebar as Nav, Logo, UserImage, UserName, BottomSideBar,
@@ -47,7 +48,7 @@ function Sidebar() {
 
     return (
         <Nav>
-            <Logo />
+            <Logo src={logo} />
             {collapsed === 'false' && <UserImage />}
             {collapsed === 'false' && <UserName>Daniel</UserName>}
             <Menu
