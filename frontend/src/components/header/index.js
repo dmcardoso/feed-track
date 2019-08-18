@@ -6,7 +6,6 @@ import { AppContext } from '../../main/App';
 import { StyledHeader, Icon } from './style';
 import { colors } from '../../configs/styled-components-options';
 
-
 function Header() {
     const { changeTheme } = useContext(AppContext);
 

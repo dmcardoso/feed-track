@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
 import { Main, MainContainer, Title } from '../../components/app-container/style';
@@ -9,10 +9,14 @@ import api from '../../services/api';
 import { parser } from '../../util/select-parser';
 import { numberOrZero } from '../../util/number';
 import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-picker-parser';
+import { success, error } from '../../components/alerts';
+import { AppContainerContext } from '../../components/app-container';
+import Loader from '../../components/loader';
 
 function Feedback(props) {
     const [defaultOptions, setDefaultOptions] = useState([]);
     const [feedback, setFeedback] = useState(null);
+    const { setLoading, loading } = useContext(AppContainerContext);
 
     const initialValues = feedback || {
         filial: '',
@@ -56,27 +60,47 @@ function Feedback(props) {
     }
 
     useEffect(() => {
-        const feedback_id = props.match.params.id || null;
-
         const getDefaultOptions = async () => {
             const filiais = await loadFiliais();
             setDefaultOptions(filiais);
+            setLoading(false);
         };
+
+        setLoading(true);
+        getDefaultOptions();
+    }, []);
+
+    useEffect(() => {
+        const feedback_id = props.match.params.id || null;
 
         const getRequestedFeedback = async (id) => {
             const requested_feedback = await getFeedback(id);
             const { filial_feedback } = requested_feedback;
             requested_feedback.filial = { label: filial_feedback.filial, value: filial_feedback.id };
             requested_feedback.data_referencia = ptBrDateToDateObject(requested_feedback.data_referencia);
-            setFeedback(requested_feedback);
+
+            const feedback_form = {
+                id: requested_feedback.id,
+                descricao: requested_feedback.descricao,
+                vendas: requested_feedback.vendas,
+                cadastros: requested_feedback.cadastros,
+                renovacoes: requested_feedback.renovacoes,
+                reativacoes: requested_feedback.reativacoes,
+                funcionario: requested_feedback.funcionario,
+                filial: requested_feedback.filial,
+                data_referencia: requested_feedback.data_referencia,
+            };
+
+            setFeedback(feedback_form);
+            setLoading(false);
         };
 
         if (feedback_id) {
+            setLoading(true);
             getRequestedFeedback(feedback_id);
         }
-
-        getDefaultOptions();
     }, [props.match.params.id]);
+
 
     function makeForm({
         handleSubmit, isSubmitting, initialValues, ...props
@@ -180,6 +204,12 @@ function Feedback(props) {
         );
     }
 
+    if (loading) {
+        return (
+            <Loader />
+        );
+    }
+
     return (
         <Main>
             <MainContainer>
@@ -225,10 +255,17 @@ function Feedback(props) {
                             feedback: feedback_to_save,
                         });
 
-                        if (result.status === 200) {
+                        if (result.status === 200 && !feedback_to_save.id) {
                             const { id } = result.data;
                             setSubmitting(false);
-                            props.history.push(`feedback/${id}`);
+                            success('Feedback cadastrado com sucesso!');
+                            props.history.push(`/feedback/${id}`);
+                        } else if (result.status === 200 && feedback_to_save.id) {
+                            setSubmitting(false);
+                            success('Feedback atualizado com sucesso!');
+                        } else {
+                            setSubmitting(false);
+                            error('Erro ao atualizar feedback!');
                         }
                     }}
                 >

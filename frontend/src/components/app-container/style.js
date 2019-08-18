@@ -26,6 +26,14 @@ const Container = styled('div')`
     width: calc(100% - ${widthSideBar});
 `;
 
+const LoadContainer = styled('div')`
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+`;
+
 const Title = styled('h1')`
     display: flex;
     font-size: ${parse(32)};
@@ -34,5 +42,5 @@ const Title = styled('h1')`
 `;
 
 export {
-    Main, Container, MainContainer, Title,
+    Main, Container, MainContainer, Title, LoadContainer
 };

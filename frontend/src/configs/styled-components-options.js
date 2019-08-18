@@ -116,7 +116,12 @@ const buttonStyle = theme.variants('mode', 'kind', {
     },
 });
 
-
 export {
-    backgroundColor, textColor, widthSideBar, marginBottomCollapsedSideBar, backgroundColorMain, buttonStyle, colors,
+    backgroundColor,
+    textColor,
+    widthSideBar,
+    marginBottomCollapsedSideBar,
+    backgroundColorMain,
+    buttonStyle,
+    colors,
 };
