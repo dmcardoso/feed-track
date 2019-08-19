@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import '../assets/font/styles.css';
 import { ThemeProvider } from 'styled-components';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import GlobalStyle from '../configs/css-reset';
 
 import AppContainer from '../components/app-container';
@@ -54,7 +52,6 @@ function App() {
 
                     <GlobalStyle />
                     <AppContainer />
-                    <ToastContainer enableMultiContainer />
                 </>
             </ThemeProvider>
         </AppContext.Provider>

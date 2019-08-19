@@ -59,7 +59,8 @@ module.exports = (app) => {
                 res.json(result);
             }
         } catch (msg) {
-            res.status(400).send(msg);
+            // console.log(msg);
+            res.status(400).send("Bad Request");
         }
     };
 

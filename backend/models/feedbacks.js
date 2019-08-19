@@ -227,8 +227,7 @@ module.exports = (app) => {
                         return result;
                     }
                     return true;
-                })
-                .catch(() => 'Bad request');
+                });
         }
 
         static async softDelete({ id }) {

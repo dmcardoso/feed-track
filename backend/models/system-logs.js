@@ -45,7 +45,7 @@ module.exports = (app = null) => {
         // eslint-disable-next-line no-unused-vars,class-methods-use-this
         $beforeValidate(jsonSchema, json, opt) {
             // eslint-disable-next-line no-param-reassign
-            json.criacao = moment().utc(true).toISOString();
+            json.criacao = moment().format('YYYY-MM-DD HH:mm:ss');
 
             return json;
         }
