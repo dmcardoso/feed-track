@@ -48,7 +48,6 @@ class BaseModel extends Model {
 
     $beforeInsert(queryContext) {
         super.$beforeInsert(queryContext);
-        console.log(this);
 
         this.brToMySQL();
     }

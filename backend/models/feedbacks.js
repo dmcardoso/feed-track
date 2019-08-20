@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const { BaseModel } = require('../config/database/base-model');
+    const {BaseModel} = require('../config/database/base-model');
     const path = require('path');
     const moment = require('moment');
     moment.locale('pt-br');
@@ -31,16 +31,16 @@ module.exports = (app) => {
                     'filial',
                 ],
                 properties: {
-                    id: { type: 'integer' },
-                    descricao: { type: 'string' },
-                    data_referencia: { type: 'string', format: 'date' },
-                    vendas: { type: 'integer' },
-                    cadastros: { type: 'integer' },
-                    renovacoes: { type: 'integer' },
-                    reativacoes: { type: 'integer' },
-                    funcionario: { type: 'number' },
-                    filial: { type: 'number' },
-                    desativado: { type: 'number' },
+                    id: {type: 'integer'},
+                    descricao: {type: 'string'},
+                    data_referencia: {type: 'string', format: 'date'},
+                    vendas: {type: 'integer'},
+                    cadastros: {type: 'integer'},
+                    renovacoes: {type: 'integer'},
+                    reativacoes: {type: 'integer'},
+                    funcionario: {type: 'number'},
+                    filial: {type: 'number'},
+                    desativado: {type: 'number'},
                 },
             };
         }
@@ -96,19 +96,19 @@ module.exports = (app) => {
         }
 
         static async get({
-            id,
-            limit,
-            search,
-            page,
-            descricao,
-            data_referencia,
-            vendas,
-            cadastros,
-            renovacoes,
-            reativacoes,
-            funcionario,
-            filial,
-        }) {
+                             id,
+                             limit,
+                             search,
+                             page,
+                             descricao,
+                             data_referencia,
+                             vendas,
+                             cadastros,
+                             renovacoes,
+                             reativacoes,
+                             funcionario,
+                             filial,
+                         }) {
             const query = this.query().select().where('feedbacks.desativado', 0);
 
             query.eagerAlgorithm(this.JoinEagerAlgorithm)
@@ -215,7 +215,15 @@ module.exports = (app) => {
                 const feedback_database = await this.query().select('*').where('id', feedback.id).first();
                 if (feedback_database && feedback_database.id) {
                     // eslint-disable-next-line no-param-reassign
-                    feedback = Object.assign(feedback_database, feedback);
+                    feedback = {...feedback_database, ...feedback};
+
+                    return this.query().upsert(feedback, feedback_database)
+                        .then((result) => {
+                            if (result) {
+                                return result;
+                            }
+                            return true;
+                        });
                 } else {
                     throw 'Não foi possível atualizar feedback!';
                 }
@@ -230,14 +238,13 @@ module.exports = (app) => {
                 });
         }
 
-        static async softDelete({ id }) {
+        static async softDelete({id}) {
             const feedback = await this.query().select('*').where('id', id).first();
 
             if (feedback && feedback.id) {
                 feedback.desativado = 1;
                 return this.query().soft(feedback)
-                    .then()
-                    .catch(() => 'Bad request!');
+                    .then();
             }
             throw 'Não foi possível excluir feedback!';
         }

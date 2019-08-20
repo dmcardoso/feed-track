@@ -1,8 +1,38 @@
-const { QueryBuilder: QueryBuilderObjection } = require('objection');
+const {QueryBuilder: QueryBuilderObjection} = require('objection');
 const path = require('path');
 
+const getModelDiff = (model, modelBefore) => {
+    if (!modelBefore) {
+        return null;
+    }
+
+    let diffMessage = "Alterações: ";
+    let diffFieldsCount = 0;
+    const diffs = [];
+
+    const messageTemplate = (field, oldValue, newValue) => `${field} alterado de '${oldValue}' para '${newValue}'`;
+
+    Object.keys(model).forEach((field, index) => {
+        const oldValue = modelBefore[field];
+        const newValue = model[field];
+
+        if (oldValue !== newValue) {
+            diffs.push(messageTemplate(field, oldValue, newValue));
+            diffFieldsCount++;
+        }
+    });
+
+    if (diffFieldsCount > 0) {
+        diffMessage += diffs.join(', ');
+        console.log(diffMessage);
+        return diffMessage;
+    }
+
+    return null;
+};
+
 class QueryBuilder extends QueryBuilderObjection {
-    upsert(model) {
+    upsert(model, modelBefore = null) {
         // eslint-disable-next-line no-underscore-dangle
         const model_class = this._modelClass;
 
@@ -16,6 +46,7 @@ class QueryBuilder extends QueryBuilderObjection {
                         usuario: 1,
                         referencia: model.id,
                         action: 'update',
+                        historico: getModelDiff(model, modelBefore),
                     };
 
                     if (result) {
@@ -41,6 +72,7 @@ class QueryBuilder extends QueryBuilderObjection {
                     usuario: 1,
                     referencia: result.id,
                     action: 'insert',
+                    historico: getModelDiff(model, modelBefore),
                 };
 
                 if (result) {
@@ -94,4 +126,4 @@ class QueryBuilder extends QueryBuilderObjection {
     }
 }
 
-module.exports = { QueryBuilder };
+module.exports = {QueryBuilder};

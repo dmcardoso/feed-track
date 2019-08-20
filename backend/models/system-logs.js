@@ -61,6 +61,7 @@ module.exports = (app = null) => {
                     usuario: { type: 'number' },
                     referencia: { type: 'number' },
                     action: { type: 'string', minLength: 1, maxLength: 240 },
+                    historico: {type: 'string'},
                     criacao: { type: 'string', format: 'date-time' },
                 },
             };
