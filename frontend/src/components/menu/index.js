@@ -5,11 +5,9 @@ import {
 } from './style';
 
 
-function Menu(props) {
-    const {
-        collapsed, icon, clickable, hoverable, hover_color, description, submenu, as, link, ...attrs
-    } = props;
-
+function Menu({
+    collapsed, icon, clickable, hoverable, hover_color, description, submenu, as, circle, link, ...attrs
+}) {
     const [submenuVisible, setSubmenuVisible] = useState(false);
     const itemRef = useRef(null);
     const descRef = useRef(null);
@@ -51,6 +49,7 @@ function Menu(props) {
 
     const item_attrs = {
         hover_color,
+        circle,
         to: link,
     };
 
@@ -88,6 +87,7 @@ function Menu(props) {
 Menu.propTypes = {
     icon: PropTypes.string,
     clickable: PropTypes.bool,
+    circle: PropTypes.any,
     collapsed: PropTypes.string,
     hoverable: PropTypes.bool,
     hover_color: PropTypes.string,
@@ -100,6 +100,7 @@ Menu.propTypes = {
 Menu.defaultProps = {
     icon: null,
     clickable: false,
+    circle: null,
     collapsed: 'false',
     hoverable: true,
     hover_color: null,

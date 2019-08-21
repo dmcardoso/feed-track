@@ -35,7 +35,8 @@ function Select({
             const borderRadius = 10;
             const { menuIsOpen } = state;
             const boxShadow = '0 0 4px rgba(0,0,0,0.2)';
-            const borderColor = menuIsOpen ? colors.green : 'transparent';
+            let borderColor = menuIsOpen ? colors.green : 'transparent';
+            borderColor = show_error ? colors.red : borderColor;
 
             return {
                 ...provided,

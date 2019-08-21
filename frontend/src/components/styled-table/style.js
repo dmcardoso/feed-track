@@ -11,27 +11,66 @@ const CustomComponent = props => (
     <div {...props} />
 );
 
+
+const BodyTD = styled('div')`
+    background: transparent;
+    color: ${colors.black};
+    font-size: ${parse(16)};
+    font-weight: bold;
+    padding-left: 42px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    
+    *::before {
+        font-size: 26px !important;
+    }
+`;
+
 const Table = styled(ReactTable)`
     border: unset !important;
     height: 609px;
+    max-width: 100%;
     overflow: hidden;
     width: 100%;
     
     .-header{
         height: 40px;
+        max-width: 100% !important;
+        min-width: 100% !important;
     }
     
     * {
         border: unset !important;
+    }
+    
+    .rt-thead {
         box-shadow: unset !important;
+    }
+    
+    .rt-td {
+        overflow: visible !important;
+        
+        li.submenu{
+            display: none;
+        }
+    }
+    
+    .rt-td:first-child {
+        div${BodyTD}{
+            padding-left: 25px;
+        }
     }
 `;
 
 const TableBody = styled(CustomComponent)`
     background: ${colors.white};
     border-radius: 25px;
-    overflow: auto; 
-    height: 100%;
+    height: 100%; 
+    max-width: 100% !important;
+    min-width: 100% !important;
+    overflow: auto;
     padding: 19.5px 0;
 `;
 
@@ -52,22 +91,17 @@ const BodyTR = styled(CustomComponent)`
     &.-even{
         background-color: ${colors['grey-even-table']};
     }
+    
+    &:hover ${BodyTD} {
+        li.submenu{
+            color: ${colors.black};
+            display: block;
+        }
+        
+        color: ${colors.green};
+        cursor: pointer;  
+    }
 `;
-
-const BodyTD = styled('div')`
-    background: transparent;
-    color: ${colors.black};
-    font-size: ${parse(16)};
-    font-weight: bold;
-    overflow: hidden;
-    padding-left: 42px;
-    text-align: left;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-`;
-
-
 
 export {
     Table, HeaderTH, BodyTD, BodyTR, TableBody,

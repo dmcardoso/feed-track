@@ -7,10 +7,13 @@ import './paginate.scss';
 import {
     Table, HeaderTH, BodyTD, BodyTR, TableBody,
 } from './style';
+import TableLoader from '../table-loader';
+import Menu from '../menu';
 
 StyledTable.propTypes = {
     headers: PropTypes.array.isRequired,
     data_function: PropTypes.func.isRequired,
+    submenuOption: PropTypes.array,
 };
 
 const initialState = {
@@ -22,7 +25,7 @@ const initialState = {
 };
 
 function StyledTable({
-    headers, data_function, ...attrs
+    headers, data_function, submenuOption, ...attrs
 }) {
     const [tableState, setTableState] = useState({ ...initialState });
 
@@ -35,6 +38,28 @@ function StyledTable({
             ...header_props,
         }
     ));
+
+    columns.unshift(
+        {
+            Header: props => <HeaderTH />,
+            Cell: props => (
+                <BodyTD>
+                    <Menu
+                        description="..."
+                        circle
+                        className="submenu"
+                        title="Opções"
+                        collapsed="false"
+                        submenu={submenuOption}
+                    />
+                </BodyTD>
+            ),
+            sortable: false,
+            resizable: false,
+            maxWidth: '60',
+            id: 'submenu',
+        },
+    );
 
     const handleData = async (data_props) => {
         setTableState({ ...tableState, loading: true });
@@ -70,11 +95,11 @@ function StyledTable({
             onFetchData={handleData}
             getTdProps={(state, rowInfo, column, instance) => ({
                 onClick: (e, handleOriginal) => {
-                    console.log('A Td Element was clicked!');
-                    console.log('it produced this event:', e);
-                    console.log('It was in this column:', column);
-                    console.log('It was in this row:', rowInfo);
-                    console.log('It was in this table instance:', instance);
+                    // console.log('A Td Element was clicked!');
+                    // console.log('it produced this event:', e);
+                    // console.log('It was in this column:', column);
+                    // console.log('It was in this row:', rowInfo);
+                    // console.log('It was in this table instance:', instance);
 
                     // IMPORTANT! React-Table uses onClick internally to trigger
                     // events like expanding SubComponents and pivots.
@@ -82,12 +107,15 @@ function StyledTable({
                     // If you want to fire the original onClick handler, call the
                     // 'handleOriginal' function.
                     if (handleOriginal) {
-                        handleOriginal();
+                        console.log(column);
+                        handleOriginal(column);
+                        console.log('passou');
                     }
                 },
             })}
             {...attrs}
             PaginationComponent={props => (<Pagination {...props} />)}
+            LoadingComponent={props => (<TableLoader {...props} />)}
         />
     );
 }

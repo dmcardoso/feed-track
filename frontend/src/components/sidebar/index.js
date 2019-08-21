@@ -37,6 +37,7 @@ function Sidebar() {
         {
             description: (collapsed === 'true' ? '' : 'Feedbacks'),
             icon: 'icon-feedback',
+            link: '/feedbacks',
             marginBottom: '10',
         },
         {

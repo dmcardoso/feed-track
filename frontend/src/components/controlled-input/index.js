@@ -20,7 +20,7 @@ function ControlledInput({
                 field.onChange(event);
             }
 
-            if (type === 'date' || type === 'select')form.setFieldValue(name, event);
+            if (type === 'date' || type === 'select') form.setFieldValue(name, event);
         },
         onBlur(event) {
             if (onBlur) {
@@ -30,6 +30,8 @@ function ControlledInput({
             if (field.onBlur) {
                 field.onBlur(event);
             }
+
+            if (type === 'date' || type === 'select') form.setFieldTouched(field.name, true);
         },
         onFocus(event) {
             if (onFocus) {
@@ -39,8 +41,6 @@ function ControlledInput({
             if (field.onFocus) {
                 field.onFocus(event);
             }
-
-            form.setFieldTouched(field.name, true);
         },
     };
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Main, MainContainer } from '../../components/app-container/style';
 import StyledTable from '../../components/styled-table';
 import api from '../../services/api';
+import Menu from '../../components/menu';
 
 function Filiais(props) {
     const getFiliais = async ({ page, limit }) => {
@@ -25,11 +26,26 @@ function Filiais(props) {
         },
     ];
 
+    const submenuOption = [
+        {
+            description: 'Editar',
+            icon: 'icon-edit',
+            title: 'Editar',
+            onClick(e) {
+                console.log(e, '<<<<<');
+            },
+        }, {
+            description: 'Excluir',
+            title: 'Excluir',
+            icon: 'icon-trash',
+        },
+    ];
+
     return (
         <Main>
             <MainContainer>
                 <div>Filiais</div>
-                <StyledTable headers={headers} data_function={getFiliais} />
+                <StyledTable headers={headers} submenuOption={submenuOption} data_function={getFiliais} />
             </MainContainer>
         </Main>
     );

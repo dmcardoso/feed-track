@@ -60,7 +60,7 @@ const GlobalStyle = createGlobalStyle`
     ul:after,
     ol:after,
     li:after {
-        content: " ";
+        //content: " ";
         display: block;
         clear: both;
         height: 0;
