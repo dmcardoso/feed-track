@@ -122,11 +122,19 @@ module.exports = (app) => {
 
                 if (permissao_database && permissao_database.id) {
                     // eslint-disable-next-line no-param-reassign
-                    permissao = Object.assign(permissao_database, permissao);
-                } else {
-                    // eslint-disable-next-line no-throw-literal
-                    throw 'Não foi possível atualizar permissao!';
+                    permissao = { ...permissao_database, ...permissao };
+
+                    return this.query()
+                        .upsert(permissao, permissao_database)
+                        .then((result) => {
+                            if (result) {
+                                return result;
+                            }
+                            return true;
+                        });
                 }
+                // eslint-disable-next-line no-throw-literal
+                throw 'Não foi possível atualizar permissao!';
             }
 
             return this.query()
@@ -136,18 +144,17 @@ module.exports = (app) => {
                         return result;
                     }
                     return true;
-                })
-                .catch(() => 'Bad request!');
+                });
         }
 
         static async softDelete({ id }) {
-            const permissao = await this.query().select('*').where('id', id).first();
+            const permissao = await this.query().select('*').where('id', id).where('desativado', '=', '0')
+                .first();
 
             if (permissao && permissao.id) {
                 permissao.desativado = 1;
                 return this.query().soft(permissao)
-                    .then()
-                    .catch(() => 'Bad request!');
+                    .then();
             }
             // eslint-disable-next-line no-throw-literal
             throw 'Não foi possível excluir permissao!';

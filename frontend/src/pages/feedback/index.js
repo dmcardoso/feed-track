@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
-import { Main, MainContainer, Title } from '../../components/app-container/style';
 import { FieldContainer, Row } from '../common-styles';
 import ControlledInput from '../../components/controlled-input';
 import Button from '../../components/button';
@@ -12,6 +11,7 @@ import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-pick
 import { success, error } from '../../components/alerts';
 import { AppContainerContext } from '../../components/app-container';
 import Loader from '../../components/loader';
+import Page from '../../components/page';
 
 function Feedback(props) {
     const [defaultOptions, setDefaultOptions] = useState([]);
@@ -211,68 +211,65 @@ function Feedback(props) {
     }
 
     return (
-        <Main>
-            <MainContainer>
-                <Title>Feedback</Title>
-                <Formik
-                    enableReinitialize
-                    validationSchema={Yup.object({
-                        descricao: Yup.string()
-                            .required('Descrição é obrigatório!'),
-                        data_referencia: Yup.mixed()
-                            .required('Data de refência é obrigatório!')
-                            .validDate('Data de refência inválida!'),
-                        vendas: Yup.number('Quantidade de vendas inválidas!'),
-                        cadastros: Yup.number('Quantidade de cadastros inválidos!'),
-                        renovacoes: Yup.number('Quantidade de renovações inválidas!'),
-                        reativacoes: Yup.number('Quantidade de reativações inválidas!'),
-                        filial: Yup.mixed()
-                            .required('Filial é obrigatória!'),
-                    })}
-                    initialValues={initialValues}
-                    onSubmit={async (values, { setSubmitting, resetForm, ...rest }) => {
-                        const feedback_to_save = { ...values };
+        <Page title="Feedback">
+            <Formik
+                enableReinitialize
+                validationSchema={Yup.object({
+                    descricao: Yup.string()
+                        .required('Descrição é obrigatório!'),
+                    data_referencia: Yup.mixed()
+                        .required('Data de refência é obrigatório!')
+                        .validDate('Data de refência inválida!'),
+                    vendas: Yup.number('Quantidade de vendas inválidas!'),
+                    cadastros: Yup.number('Quantidade de cadastros inválidos!'),
+                    renovacoes: Yup.number('Quantidade de renovações inválidas!'),
+                    reativacoes: Yup.number('Quantidade de reativações inválidas!'),
+                    filial: Yup.mixed()
+                        .required('Filial é obrigatória!'),
+                })}
+                initialValues={initialValues}
+                onSubmit={async (values, { setSubmitting, resetForm, ...rest }) => {
+                    const feedback_to_save = { ...values };
 
-                        if (feedback && feedback.id) {
-                            feedback_to_save.id = feedback.id;
-                        }
+                    if (feedback && feedback.id) {
+                        feedback_to_save.id = feedback.id;
+                    }
 
-                        feedback_to_save.vendas = numberOrZero(feedback_to_save.vendas);
-                        feedback_to_save.cadastros = numberOrZero(feedback_to_save.cadastros);
-                        feedback_to_save.renovacoes = numberOrZero(feedback_to_save.renovacoes);
-                        feedback_to_save.reativacoes = numberOrZero(feedback_to_save.reativacoes);
+                    feedback_to_save.vendas = numberOrZero(feedback_to_save.vendas);
+                    feedback_to_save.cadastros = numberOrZero(feedback_to_save.cadastros);
+                    feedback_to_save.renovacoes = numberOrZero(feedback_to_save.renovacoes);
+                    feedback_to_save.reativacoes = numberOrZero(feedback_to_save.reativacoes);
 
-                        if (feedback_to_save.data_referencia && feedback_to_save.data_referencia !== '') {
-                            feedback_to_save.data_referencia = datePickerDateParser(feedback_to_save.data_referencia);
-                        }
+                    if (feedback_to_save.data_referencia && feedback_to_save.data_referencia !== '') {
+                        feedback_to_save.data_referencia = datePickerDateParser(feedback_to_save.data_referencia);
+                    }
 
-                        feedback_to_save.filial = feedback_to_save.filial.value;
+                    feedback_to_save.filial = feedback_to_save.filial.value;
 
-                        // TODO pegar o funcionário atual
-                        feedback_to_save.funcionario = 1;
+                    // TODO pegar o funcionário atual
+                    feedback_to_save.funcionario = 1;
 
-                        const result = await api.post('/feedbacks', {
-                            feedback: feedback_to_save,
-                        });
+                    const result = await api.post('/feedbacks', {
+                        feedback: feedback_to_save,
+                    });
 
-                        if (result.status === 200 && !feedback_to_save.id) {
-                            const { id } = result.data;
-                            setSubmitting(false);
-                            success('Feedback cadastrado com sucesso!');
-                            props.history.push(`/feedback/${id}`);
-                        } else if (result.status === 200 && feedback_to_save.id) {
-                            setSubmitting(false);
-                            success('Feedback atualizado com sucesso!');
-                        } else {
-                            setSubmitting(false);
-                            error('Erro ao atualizar feedback!');
-                        }
-                    }}
-                >
-                    {makeForm}
-                </Formik>
-            </MainContainer>
-        </Main>
+                    if (result.status === 200 && !feedback_to_save.id) {
+                        const { id } = result.data;
+                        setSubmitting(false);
+                        success('Feedback cadastrado com sucesso!');
+                        props.history.push(`/feedback/${id}`);
+                    } else if (result.status === 200 && feedback_to_save.id) {
+                        setSubmitting(false);
+                        success('Feedback atualizado com sucesso!');
+                    } else {
+                        setSubmitting(false);
+                        error('Erro ao atualizar feedback!');
+                    }
+                }}
+            >
+                {makeForm}
+            </Formik>
+        </Page>
     );
 }
 

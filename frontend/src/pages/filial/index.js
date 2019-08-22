@@ -1,13 +1,13 @@
 import React from 'react';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { Main, MainContainer, Title } from '../../components/app-container/style';
 import api from '../../services/api';
 import { Row, FieldContainer } from '../common-styles';
 
 import ControlledInput from '../../components/controlled-input';
 import Button from '../../components/button';
-import {datePickerDateParser} from "../../util/date-picker-parser";
+import { datePickerDateParser } from '../../util/date-picker-parser';
+import Page from '../../components/page';
 
 function Form(props) {
     function makeForm({ handleSubmit, isSubmitting, ...props }) {
@@ -43,46 +43,43 @@ function Form(props) {
     }
 
     return (
-        <Main>
-            <MainContainer>
-                <Title>Filial</Title>
-                <Formik
-                    validationSchema={Yup.object({
-                        filial: Yup.string()
-                            .required('Filial é obrigatório!'),
-                        fundacao: Yup.mixed()
-                            .validDate('Data de fundação inválida!'),
-                    })}
-                    initialValues={{
-                        filial: '',
-                        fundacao: '',
-                    }}
-                    onSubmit={async (values, { setSubmitting, resetForm, ...rest }) => {
-                        const filial = {
-                            ...values,
-                        };
+        <Page title="Filial">
+            <Formik
+                validationSchema={Yup.object({
+                    filial: Yup.string()
+                        .required('Filial é obrigatório!'),
+                    fundacao: Yup.mixed()
+                        .validDate('Data de fundação inválida!'),
+                })}
+                initialValues={{
+                    filial: '',
+                    fundacao: '',
+                }}
+                onSubmit={async (values, { setSubmitting, resetForm, ...rest }) => {
+                    const filial = {
+                        ...values,
+                    };
 
-                        if (
-                            filial.fundacao
-                            && filial.fundacao !== ''
-                        ) {
-                            filial.fundacao = datePickerDateParser(filial.fundacao);
-                        }
+                    if (
+                        filial.fundacao
+                        && filial.fundacao !== ''
+                    ) {
+                        filial.fundacao = datePickerDateParser(filial.fundacao);
+                    }
 
-                        const result = await api.post('/filiais', {
-                            filial,
-                        });
+                    const result = await api.post('/filiais', {
+                        filial,
+                    });
 
-                        if (result.status === 200) {
-                            setSubmitting(false);
-                            resetForm();
-                        }
-                    }}
-                >
-                    {makeForm}
-                </Formik>
-            </MainContainer>
-        </Main>
+                    if (result.status === 200) {
+                        setSubmitting(false);
+                        resetForm();
+                    }
+                }}
+            >
+                {makeForm}
+            </Formik>
+        </Page>
     );
 }
 

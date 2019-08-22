@@ -157,10 +157,17 @@ module.exports = (app) => {
                 const filial_database = await app.models.filiais.query().select('*').where('id', filial.id).first();
                 if (filial_database && filial_database.id) {
                     // eslint-disable-next-line no-param-reassign
-                    filial = Object.assign(filial_database, filial);
-                } else {
-                    throw 'Não foi possível atualizar filial!';
+                    filial = { ...filial_database, ...filial };
+
+                    return this.query().upsert(filial, filial_database)
+                        .then((result) => {
+                            if (result) {
+                                return result;
+                            }
+                            return true;
+                        });
                 }
+                throw 'Não foi possível atualizar filial!';
             }
 
             return this.query().upsert(filial)
@@ -169,19 +176,18 @@ module.exports = (app) => {
                         return result;
                     }
                     return true;
-                })
-                .catch(() => 'Bad request!');
+                });
         }
 
         static async softDelete({ id }) {
-            const filial = await this.query().select('*').where('id', id).first();
+            const filial = await this.query().select('*').where('id', id).where('desativado', '=', '0')
+                .first();
 
             if (filial && filial.id) {
                 filial.desativado = 1;
 
                 return this.query().soft(filial)
-                    .then()
-                    .catch(() => 'Bad request!');
+                    .then();
             }
             throw 'Não foi possível excluir filial!';
         }

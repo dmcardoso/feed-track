@@ -60,13 +60,13 @@ module.exports = (app) => {
         };
 
         try {
-            const result = app.models.filiais.softDelete(data);
+            const result = await app.models.filiais.softDelete(data);
 
             if (result) {
                 res.sendStatus(204);
             }
         } catch (msg) {
-            res.status(400).send(msg);
+            res.sendStatus(400);
         }
     };
 

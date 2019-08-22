@@ -19,10 +19,10 @@ function makePagination(props) {
             items.push(
                 <Component
                     key={index}
-                    active={selected === index}
-                    onClick={() => changePage(index)}
+                    active={selected === (index + 1)}
+                    onClick={() => changePage(index + 1)}
                 >
-                    {index}
+                    {index + 1}
                 </Component>,
             );
         }

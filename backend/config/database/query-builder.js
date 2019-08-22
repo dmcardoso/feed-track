@@ -1,4 +1,4 @@
-const {QueryBuilder: QueryBuilderObjection} = require('objection');
+const { QueryBuilder: QueryBuilderObjection } = require('objection');
 const path = require('path');
 
 const getModelDiff = (model, modelBefore) => {
@@ -6,7 +6,7 @@ const getModelDiff = (model, modelBefore) => {
         return null;
     }
 
-    let diffMessage = "Alterações: ";
+    let diffMessage = 'Alterações: \n';
     let diffFieldsCount = 0;
     const diffs = [];
 
@@ -18,13 +18,12 @@ const getModelDiff = (model, modelBefore) => {
 
         if (oldValue !== newValue) {
             diffs.push(messageTemplate(field, oldValue, newValue));
-            diffFieldsCount++;
+            diffFieldsCount += 1;
         }
     });
 
     if (diffFieldsCount > 0) {
-        diffMessage += diffs.join(', ');
-        console.log(diffMessage);
+        diffMessage += diffs.join(',\n ');
         return diffMessage;
     }
 
@@ -126,4 +125,4 @@ class QueryBuilder extends QueryBuilderObjection {
     }
 }
 
-module.exports = {QueryBuilder};
+module.exports = { QueryBuilder };

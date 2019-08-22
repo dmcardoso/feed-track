@@ -58,7 +58,7 @@ module.exports = (app) => {
                 res.sendStatus(204);
             }
         } catch (msg) {
-            res.sendStatus(400).send(msg);
+            res.sendStatus(400);
         }
     };
 

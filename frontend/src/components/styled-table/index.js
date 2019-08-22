@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from '../pagination';
 
 import './paginate.scss';
 
 import {
-    Table, HeaderTH, BodyTD, BodyTR, TableBody,
+    Table,
 } from './style';
 import TableLoader from '../table-loader';
 import Menu from '../menu';
-
-StyledTable.propTypes = {
-    headers: PropTypes.array.isRequired,
-    data_function: PropTypes.func.isRequired,
-    submenuOption: PropTypes.array,
-};
 
 const initialState = {
     loading: true,
@@ -25,41 +19,52 @@ const initialState = {
 };
 
 function StyledTable({
-    headers, data_function, submenuOption, ...attrs
+    headers, data_function, submenuOption, clickHandler, fireFetch, ...attrs
 }) {
     const [tableState, setTableState] = useState({ ...initialState });
+    const tableRef = useRef(null);
+
+    useEffect(() => {
+        if (fireFetch && tableRef.current) {
+            tableRef.current.fireFetchData();
+        }
+    }, [fireFetch]);
 
     const columns = headers.map(({ name, ...header_props }) => (
         {
-            Header: props => <HeaderTH>{name}</HeaderTH>,
-            Cell: props => <BodyTD>{props.value}</BodyTD>,
+            Header: props => <div>{name}</div>,
+            Cell: props => <div>{props.value}</div>,
             sortable: false,
             resizable: false,
             ...header_props,
         }
     ));
 
-    columns.unshift(
-        {
-            Header: props => <HeaderTH />,
-            Cell: props => (
-                <BodyTD>
-                    <Menu
-                        description="..."
-                        circle
-                        className="submenu"
-                        title="Opções"
-                        collapsed="false"
-                        submenu={submenuOption}
-                    />
-                </BodyTD>
-            ),
-            sortable: false,
-            resizable: false,
-            maxWidth: '60',
-            id: 'submenu',
-        },
-    );
+    if (submenuOption) {
+        columns.unshift(
+            {
+                Header: props => <div />,
+                Cell: props => (
+                    <div>
+                        <Menu
+                            description="..."
+                            circle
+                            className="submenu"
+                            title="Opções"
+                            collapsed="false"
+                            submenu={submenuOption(props)}
+                        />
+                    </div>
+                ),
+                sortable: false,
+                resizable: false,
+                maxWidth: '10',
+                id: 'submenu',
+            },
+        );
+    }
+
+    const padding_left_first_child = !!submenuOption;
 
     const handleData = async (data_props) => {
         setTableState({ ...tableState, loading: true });
@@ -80,8 +85,6 @@ function StyledTable({
         <Table
             data={tableState.data}
             columns={columns}
-            TbodyComponent={props => <TableBody {...props} />}
-            TrComponent={props => <BodyTR {...props} />}
             noDataText="Nenhum registro encontrado"
             pageSize={15}
             manual
@@ -92,24 +95,20 @@ function StyledTable({
             minRows={0}
             previousText="<"
             nextText=">"
+            ref={tableRef}
             onFetchData={handleData}
+            padding_left_first_child={padding_left_first_child}
             getTdProps={(state, rowInfo, column, instance) => ({
                 onClick: (e, handleOriginal) => {
-                    // console.log('A Td Element was clicked!');
-                    // console.log('it produced this event:', e);
-                    // console.log('It was in this column:', column);
-                    // console.log('It was in this row:', rowInfo);
-                    // console.log('It was in this table instance:', instance);
-
-                    // IMPORTANT! React-Table uses onClick internally to trigger
-                    // events like expanding SubComponents and pivots.
-                    // By default a custom 'onClick' handler will override this functionality.
-                    // If you want to fire the original onClick handler, call the
-                    // 'handleOriginal' function.
+                    if (column.id === 'submenu') {
+                        return;
+                    }
                     if (handleOriginal) {
-                        console.log(column);
-                        handleOriginal(column);
-                        console.log('passou');
+                        handleOriginal();
+                    }
+
+                    if (clickHandler) {
+                        clickHandler(state, rowInfo, column, instance);
                     }
                 },
             })}
@@ -119,5 +118,19 @@ function StyledTable({
         />
     );
 }
+
+StyledTable.propTypes = {
+    headers: PropTypes.array.isRequired,
+    data_function: PropTypes.func.isRequired,
+    submenuOption: PropTypes.func,
+    clickHandler: PropTypes.func,
+    fireFetch: PropTypes.bool,
+};
+
+StyledTable.defaultProps = {
+    submenuOption: null,
+    clickHandler: null,
+    fireFetch: null,
+};
 
 export default StyledTable;

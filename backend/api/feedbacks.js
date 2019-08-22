@@ -72,13 +72,13 @@ module.exports = (app) => {
         };
 
         try {
-            const result = app.models.feedbacks.softDelete(data);
+            const result = await app.models.feedbacks.softDelete(data);
 
             if (result) {
                 res.sendStatus(204);
             }
         } catch (msg) {
-            res.status(400).send(msg);
+            res.sendStatus(400);
         }
     };
 

@@ -192,10 +192,17 @@ module.exports = (app) => {
 
                 if (funcionario_database && funcionario_database.id) {
                     // eslint-disable-next-line no-param-reassign
-                    funcionario = Object.assign(funcionario_database, funcionario);
-                } else {
-                    throw 'Não foi possível atualizar funcionario!';
+                    funcionario = { ...funcionario_database, ...funcionario };
+
+                    return this.query().upsert(funcionario, funcionario_database)
+                        .then((result) => {
+                            if (result) {
+                                return result;
+                            }
+                            return true;
+                        });
                 }
+                throw 'Não foi possível atualizar funcionario!';
             }
 
             return this.query().upsert(funcionario)
@@ -204,19 +211,18 @@ module.exports = (app) => {
                         return result;
                     }
                     return true;
-                })
-                .catch(() => 'Bad request');
+                });
         }
 
         static async softDelete({ id }) {
-            const funcionario = await app.models.funcionarios.query().select('*').where('id', id).first();
+            const funcionario = await app.models.funcionarios.query().select('*').where('id', id).where('desativado', '=', '0')
+                .first();
 
             if (funcionario && funcionario.id) {
                 funcionario.desativado = 1;
 
                 return this.query().soft(funcionario)
-                    .then()
-                    .catch(() => 'Bad request!');
+                    .then();
             }
             throw 'Não foi possível excluir funcionario!';
         }

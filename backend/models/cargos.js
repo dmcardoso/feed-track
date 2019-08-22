@@ -136,10 +136,17 @@ module.exports = (app) => {
                 const cargo_database = await app.models.cargos.query().select('*').where('id', cargo.id).first();
                 if (cargo_database && cargo_database.id) {
                     // eslint-disable-next-line no-param-reassign
-                    cargo = Object.assign(cargo_database, cargo);
-                } else {
-                    throw 'Não foi possível atualizar cargo!';
+                    cargo = { ...cargo_database, ...cargo };
+
+                    return this.query().upsert(cargo, cargo_database)
+                        .then((result) => {
+                            if (result) {
+                                return result;
+                            }
+                            return true;
+                        });
                 }
+                throw 'Não foi possível atualizar cargo!';
             }
 
             return this.query().upsert(cargo)
@@ -148,18 +155,17 @@ module.exports = (app) => {
                         return result;
                     }
                     return true;
-                })
-                .catch(() => 'Bad request');
+                });
         }
 
         static async softDelete({ id }) {
-            const cargo = await this.query().select('*').where('cargos.id', id).first();
+            const cargo = await this.query().select('*').where('cargos.id', id).where('desativado', '=', '0')
+                .first();
 
             if (cargo && cargo.id) {
                 cargo.desativado = 1;
                 this.query().soft(cargo)
-                    .then()
-                    .catch(() => 'Bad request!');
+                    .then();
             }
             throw 'Não foi possível excluir cargo!';
         }
