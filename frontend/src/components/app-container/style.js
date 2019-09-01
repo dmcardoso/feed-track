@@ -14,9 +14,11 @@ const Main = styled('main')`
 `;
 
 const MainContainer = styled('div')`
+    display: flex;
     height: 100%;
     padding: 59px;
-    width: 100%;
+    transition: .4s;
+    width: ${props => (props.sideActivitiesVisible ? 'calc(100% - 510px)' : '100%')};
 `;
 
 const Container = styled('div')`
@@ -34,13 +36,22 @@ const LoadContainer = styled('div')`
     width: 100%;
 `;
 
-const Title = styled('h1')`
+const Column = styled('div')`
     display: flex;
-    font-size: ${parse(32)};
-    font-weight: bold;
-    margin-bottom: 50px;
+    flex-direction: column;
+    width: 100%;
+`;
+
+const Row = styled('div')`
+    display: flex;
+    margin: ${props => (props.margin ? props.margin : '')};
+    width: 100%;
+`;
+
+const RowSpaceBetween = styled(Row)`
+    justify-content: space-between;
 `;
 
 export {
-    Main, Container, MainContainer, Title, LoadContainer
+    Main, Container, MainContainer, LoadContainer, Column, Row, RowSpaceBetween,
 };

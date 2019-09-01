@@ -3,9 +3,23 @@ import PropTypes from 'prop-types';
 import Input from '../form-components/input';
 import DatePicker from '../form-components/date-picker';
 import Select from '../form-components/select';
+import StyledRadioGroup from '../form-components/styled-radio-group';
 
 function ControlledInput({
-    children, id, field, form, onChange, onBlur, onFocus, width, height, margin, background_color, type, ...props
+    children,
+    id,
+    field,
+    form,
+    onChange,
+    onBlur,
+    onFocus,
+    width,
+    height,
+    margin,
+    background_color,
+    type,
+    options,
+    ...props
 }) {
     const { name, value } = field;
     const { errors, touched } = form;
@@ -20,7 +34,7 @@ function ControlledInput({
                 field.onChange(event);
             }
 
-            if (type === 'date' || type === 'select') form.setFieldValue(name, event);
+            if (type === 'date' || type === 'select' || type === 'input_radio') form.setFieldValue(name, event);
         },
         onBlur(event) {
             if (onBlur) {
@@ -31,7 +45,7 @@ function ControlledInput({
                 field.onBlur(event);
             }
 
-            if (type === 'date' || type === 'select') form.setFieldTouched(field.name, true);
+            if (type === 'date' || type === 'select' || type === 'input_radio') form.setFieldTouched(field.name, true);
         },
         onFocus(event) {
             if (onFocus) {
@@ -60,8 +74,12 @@ function ControlledInput({
         field_props.error_message = errors[name];
     }
 
-    if (type !== 'date') {
+    if (type !== 'date' && type !== 'input_radio') {
         field_props.type = type;
+    }
+
+    if (type === 'input_radio') {
+        field_props.options = options;
     }
 
     return (
@@ -70,6 +88,14 @@ function ControlledInput({
                 if (type === 'date') {
                     return (
                         <DatePicker
+                            {...field_props}
+                        />
+                    );
+                }
+
+                if (type === 'input_radio') {
+                    return (
+                        <StyledRadioGroup
                             {...field_props}
                         />
                     );
@@ -105,6 +131,7 @@ ControlledInput.propTypes = {
     width: PropTypes.string,
     height: PropTypes.string,
     margin: PropTypes.string,
+    options: PropTypes.array,
     background_color: PropTypes.string,
 };
 
@@ -116,6 +143,7 @@ ControlledInput.defaultProps = {
     onFocus: null,
     width: '100%',
     height: '60px',
+    options: [],
     type: 'text',
     margin: '0 0 31px 0',
     background_color: 'white',

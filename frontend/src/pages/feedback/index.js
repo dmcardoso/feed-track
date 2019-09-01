@@ -10,13 +10,12 @@ import { numberOrZero } from '../../util/number';
 import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-picker-parser';
 import { success, error } from '../../components/alerts';
 import { AppContainerContext } from '../../components/app-container';
-import Loader from '../../components/loader';
 import Page from '../../components/page';
 
 function Feedback(props) {
     const [defaultOptions, setDefaultOptions] = useState([]);
     const [feedback, setFeedback] = useState(null);
-    const { setLoading, loading } = useContext(AppContainerContext);
+    const { setLoading, setActivities } = useContext(AppContainerContext);
 
     const initialValues = feedback || {
         filial: '',
@@ -75,24 +74,45 @@ function Feedback(props) {
 
         const getRequestedFeedback = async (id) => {
             const requested_feedback = await getFeedback(id);
-            const { filial_feedback } = requested_feedback;
-            requested_feedback.filial = { label: filial_feedback.filial, value: filial_feedback.id };
-            requested_feedback.data_referencia = ptBrDateToDateObject(requested_feedback.data_referencia);
 
-            const feedback_form = {
-                id: requested_feedback.id,
-                descricao: requested_feedback.descricao,
-                vendas: requested_feedback.vendas,
-                cadastros: requested_feedback.cadastros,
-                renovacoes: requested_feedback.renovacoes,
-                reativacoes: requested_feedback.reativacoes,
-                funcionario: requested_feedback.funcionario,
-                filial: requested_feedback.filial,
-                data_referencia: requested_feedback.data_referencia,
-            };
+            if (requested_feedback) {
+                const feedback_activities = [];
 
-            setFeedback(feedback_form);
-            setLoading(false);
+                if (requested_feedback.inserted) {
+                    feedback_activities.push(requested_feedback.inserted);
+                }
+
+                if (requested_feedback.updated) {
+                    feedback_activities.push(requested_feedback.updated);
+                }
+
+                if (feedback_activities.length > 0) {
+                    setActivities(feedback_activities);
+                }
+
+                const { filial_feedback } = requested_feedback;
+                requested_feedback.filial = { label: filial_feedback.filial, value: filial_feedback.id };
+                requested_feedback.data_referencia = ptBrDateToDateObject(requested_feedback.data_referencia);
+
+                const feedback_form = {
+                    id: requested_feedback.id,
+                    descricao: requested_feedback.descricao,
+                    vendas: requested_feedback.vendas,
+                    cadastros: requested_feedback.cadastros,
+                    renovacoes: requested_feedback.renovacoes,
+                    reativacoes: requested_feedback.reativacoes,
+                    funcionario: requested_feedback.funcionario,
+                    filial: requested_feedback.filial,
+                    data_referencia: requested_feedback.data_referencia,
+                };
+
+                setFeedback(feedback_form);
+                setLoading(false);
+            } else {
+                props.history.push('/feedback');
+                error('Erro! Feedback não encontrado!');
+                setLoading(false);
+            }
         };
 
         if (feedback_id) {
@@ -201,12 +221,6 @@ function Feedback(props) {
                     <Button type="submit" kind={isSubmitting ? 'disabled' : 'save'} label="Enviar" />
                 </Row>
             </form>
-        );
-    }
-
-    if (loading) {
-        return (
-            <Loader />
         );
     }
 

@@ -92,4 +92,6 @@ atlassian-ide-plugin.xml
 # Cursive Clojure plugin
 .idea/replstate.xml
 
-# Editor-based Rest 
+# Editor-based Rest
+./backend/src/uploads/*
+!./backend/src/uploads/!.gitkeep

@@ -14,6 +14,7 @@ const Container = styled('div')`
 
 const InputContainer = styled('div')`
     height: ${props => props.height};
+    margin: ${props => props.margin};
     position: relative;
     width: 100%;
 `;
@@ -49,7 +50,7 @@ const Icon = styled(IconTag)`
     position: absolute;
     top: calc(50% - (27px / 2));
     width: 27px;
-    z-index: ${props => (props.z_index ? props.z_index : null)};
+    z-index: ${props => (props.z_index ? props.z_index : 1)};
     
     ${props => (props.cancelDatePicker ? cancelDatePickerStyle : null)}
     

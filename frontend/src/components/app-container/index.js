@@ -9,11 +9,12 @@ import Sidebar from '../sidebar';
 const AppContainerContext = createContext();
 
 function AppContainer() {
+    const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(false);
 
     return (
         <BrowserRouter>
-            <AppContainerContext.Provider value={{ setLoading, loading }}>
+            <AppContainerContext.Provider value={{ setLoading, loading, activities, setActivities }}>
                 <>
                     <Sidebar />
                     <Container>

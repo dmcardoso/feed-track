@@ -55,7 +55,7 @@ Input.defaultProps = {
     width: '100%',
     height: '80px',
     icon: null,
-    background_color: 'transparent',
+    background_color: 'white',
     id: null,
     margin: null,
     error_message: null,

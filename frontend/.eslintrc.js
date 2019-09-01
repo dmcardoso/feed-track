@@ -23,7 +23,7 @@ module.exports = {
         'better-styled-components'
     ],
     rules: {
-        "indent": ["error", 4],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "react/jsx-indent": ["error", 4],
         "semi": "error",
         "semi-style": ["error", "last"],

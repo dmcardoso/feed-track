@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../configs/styled-components-options';
-import { parse } from '../../util/styled-components/font-size';
+import { colors } from '../../../configs/styled-components-options';
+import { parse } from '../../../util/styled-components/font-size';
 
 const IconTag = props => (
     <i className={props.className} />
