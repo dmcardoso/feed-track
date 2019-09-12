@@ -50,7 +50,7 @@ const Icon = styled(IconTag)`
     position: absolute;
     top: calc(50% - (27px / 2));
     width: 27px;
-    z-index: ${props => (props.z_index ? props.z_index : 1)};
+    z-index: ${props => (props.z_index ? props.z_index : 0)};
     
     ${props => (props.cancelDatePicker ? cancelDatePickerStyle : null)}
     

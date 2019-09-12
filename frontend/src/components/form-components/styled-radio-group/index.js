@@ -9,7 +9,7 @@ import {
 
 
 function StyledRadioGroup({
-    width, margin, label, error_message, name, id, height, value, onChange, options, ...props
+    width, margin, label, error_message, name, height, value, onChange, options, ...props
 }) {
     // const [selectedValue, setSelectedValue] = useState(value);
     const show_label = label !== null;
@@ -17,7 +17,6 @@ function StyledRadioGroup({
 
     const input_attrs = {
         name,
-        id: id || name,
     };
 
     if (show_error) {
@@ -61,7 +60,6 @@ StyledRadioGroup.propTypes = {
     icon: PropTypes.string,
     error_message: PropTypes.string,
     label: PropTypes.string,
-    id: PropTypes.string,
     margin: PropTypes.string,
     background_color: PropTypes.string,
     options: PropTypes.array.isRequired,
@@ -75,7 +73,6 @@ StyledRadioGroup.defaultProps = {
     height: 'auto',
     icon: null,
     background_color: 'white',
-    id: null,
     margin: null,
     error_message: null,
     label: null,

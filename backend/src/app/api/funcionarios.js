@@ -1,6 +1,6 @@
 const express = require('express');
 const moment = require('moment');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const { images_url } = require('../../config/paths');
 const Funcionarios = require('../models/funcionarios');
 
@@ -57,8 +57,7 @@ const save = async (req, res) => {
                 throw 'Senhas devem ser iguais!';
             }
 
-            console.log(fields);
-            if (funcionario.senha) funcionario.senha = await bcrypt.hash(funcionario.senha, 10);
+            if (funcionario.senha) funcionario.senha = crypto.createHmac('sha256', funcionario.senha).digest('hex');
 
             const result = await Funcionarios.save(funcionario);
 

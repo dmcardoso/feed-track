@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     };
 
     try {
-        const result = await app.models.permissoes.get(data);
+        const result = await Permissoes.get(data);
 
         res.json(result);
     } catch (msg) {
@@ -37,7 +37,7 @@ const save = async (req, res) => {
             throw 'Descrição inválida!';
         }
 
-        const result = await app.models.permissoes.save(permissao);
+        const result = await Permissoes.save(permissao);
 
         if (result === true) {
             res.sendStatus(204);
@@ -52,7 +52,7 @@ const save = async (req, res) => {
 router.put('/', save);
 router.post('/', save);
 
-router.delete('/',  async (req, res) => {
+router.delete('/', async (req, res) => {
     const { id } = req.params;
 
     const data = {
@@ -60,7 +60,7 @@ router.delete('/',  async (req, res) => {
     };
 
     try {
-        const result = await app.models.permissoes.softDelete(data);
+        const result = await Permissoes.softDelete(data);
 
         if (result) {
             res.sendStatus(204);

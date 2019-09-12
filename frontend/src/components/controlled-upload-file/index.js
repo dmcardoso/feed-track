@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import UploadFile from '../form-components/upload-file';
+import api from '../../services/api';
 
 function ControlledUploadFile({
     children, id, field, form, onChange, onBlur, onFocus, width, height, margin, background_color, type, ...props
 }) {
     const { name, value } = field;
 
-    let image_preview = (value && typeof value === 'string') ? { preview: value } : value;
+    let image_preview = (value && typeof value === 'string') ? { preview: `${api.defaults.baseURL}${value}` } : value;
     image_preview = (!value) ? '' : image_preview;
 
     const [photo, setPhoto] = useState(image_preview);

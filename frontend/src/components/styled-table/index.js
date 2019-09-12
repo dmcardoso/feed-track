@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from '../pagination';
 
-import './paginate.scss';
-
 import {
     Table,
 } from './style';

@@ -57,7 +57,11 @@ function Filiais(props) {
                                     const loadAlert = loading('Excluindo filial...');
 
                                     try {
-                                        const deleted = await api.delete(`/filiais/${tableInfo.original.id}`);
+                                        const deleted = await api.delete('/filiais', {
+                                            params: {
+                                                id: tableInfo.original.id,
+                                            },
+                                        });
 
                                         if (deleted.status === 204) {
                                             loadAlert();

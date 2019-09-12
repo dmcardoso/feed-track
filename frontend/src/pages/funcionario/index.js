@@ -68,10 +68,6 @@ function Funcionario(props) {
                     requested_funcionario.nascimento = '';
                 }
 
-                if (requested_funcionario.foto) {
-                    requested_funcionario.foto = `${api.defaults.baseURL}${requested_funcionario.foto}`;
-                }
-
                 const {
                     inserted, updated, permissoes, desativado, ...funcionario_form
                 } = { ...requested_funcionario };
@@ -143,7 +139,6 @@ function Funcionario(props) {
                         <Field
                             type="input_radio"
                             name="sexo"
-                            id="sexo"
                             label="Sexo"
                             height="auto"
                             options={

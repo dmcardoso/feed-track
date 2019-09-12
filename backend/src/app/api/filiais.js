@@ -62,7 +62,7 @@ router.put('/', save);
 router.post('/', save);
 
 router.delete('/', async (req, res) => {
-    const { id } = req.params;
+    const id = req.query.id || req.params.id || 0;
 
     const data = {
         id,
@@ -75,6 +75,7 @@ router.delete('/', async (req, res) => {
             res.sendStatus(204);
         }
     } catch (msg) {
+        console.log(msg);
         res.sendStatus(400);
     }
 });
