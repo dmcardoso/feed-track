@@ -4,6 +4,7 @@ import Input from '../form-components/input';
 import DatePicker from '../form-components/date-picker';
 import Select from '../form-components/select';
 import StyledRadioGroup from '../form-components/styled-radio-group';
+import StyledCheckBoxGroup from '../form-components/checkbox-group';
 
 function ControlledInput({
     children,
@@ -34,7 +35,10 @@ function ControlledInput({
                 field.onChange(event);
             }
 
-            if (type === 'date' || type === 'select' || type === 'input_radio') form.setFieldValue(name, event);
+            if (type === 'date'
+                || type === 'select'
+                || type === 'input_radio'
+                || type === 'input_checkbox') form.setFieldValue(name, event);
         },
         onBlur(event) {
             if (onBlur) {
@@ -45,7 +49,10 @@ function ControlledInput({
                 field.onBlur(event);
             }
 
-            if (type === 'date' || type === 'select' || type === 'input_radio') form.setFieldTouched(field.name, true);
+            if (type === 'date'
+                || type === 'select'
+                || type === 'input_radio'
+                || type === 'input_checkbox') form.setFieldTouched(field.name, true);
         },
         onFocus(event) {
             if (onFocus) {
@@ -74,11 +81,11 @@ function ControlledInput({
         field_props.error_message = errors[name];
     }
 
-    if (type !== 'date' && type !== 'input_radio') {
+    if (type !== 'date' && type !== 'input_radio' && type !== 'input_checkbox') {
         field_props.type = type;
     }
 
-    if (type === 'input_radio') {
+    if (type === 'input_radio' || type === 'input_checkbox') {
         field_props.options = options;
     }
 
@@ -96,6 +103,14 @@ function ControlledInput({
                 if (type === 'input_radio') {
                     return (
                         <StyledRadioGroup
+                            {...field_props}
+                        />
+                    );
+                }
+
+                if (type === 'input_checkbox') {
+                    return (
+                        <StyledCheckBoxGroup
                             {...field_props}
                         />
                     );

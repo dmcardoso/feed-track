@@ -93,5 +93,5 @@ atlassian-ide-plugin.xml
 .idea/replstate.xml
 
 # Editor-based Rest
-./backend/src/uploads/*
 #!./backend/src/uploads/!.gitkeep
+/backend/src/uploads/

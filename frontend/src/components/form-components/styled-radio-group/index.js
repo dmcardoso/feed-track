@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
     Container, ErrorMessage, InputContainer, Label,
@@ -11,7 +11,6 @@ import {
 function StyledRadioGroup({
     width, margin, label, error_message, name, height, value, onChange, options, ...props
 }) {
-    // const [selectedValue, setSelectedValue] = useState(value);
     const show_label = label !== null;
     const show_error = error_message !== null;
 
@@ -27,7 +26,6 @@ function StyledRadioGroup({
         if (onChange) {
             onChange(e);
         }
-        // setSelectedValue(e);
     };
 
     return (
