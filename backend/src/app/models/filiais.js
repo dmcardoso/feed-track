@@ -30,14 +30,15 @@ class Filiais extends BaseModel {
 
     static get relationMappings() {
         /* eslint import/no-dynamic-require: 0 */
-        const FiliaisFuncionarios = require(path.resolve(this.modelPaths, 'filiais-funcionarios.js'));
+        // const FiliaisFuncionarios = require(path.resolve(this.modelPaths, 'filiais-funcionarios.js'));
+        const Funcionarios = require(path.resolve(this.modelPaths, 'funcionarios.js'));
         const Feedbacks = require(path.resolve(this.modelPaths, 'feedbacks.js'));
         const SystemLogs = require(path.resolve(this.modelPaths, 'system-logs.js'));
 
         return {
             funcionarios_filial: {
                 relation: BaseModel.ManyToManyRelation,
-                modelClass: FiliaisFuncionarios,
+                modelClass: Funcionarios,
                 join: {
                     from: 'filiais.id',
                     through: {
@@ -144,6 +145,39 @@ class Filiais extends BaseModel {
         const results = await query.then();
 
         const total = await query.groupBy('id').resultSize();
+
+        return {
+            results,
+            total,
+        };
+    }
+
+    static async getFuncionarios({
+        id,
+        limit,
+        page,
+    }) {
+        const query = this.query()
+            .select('filiais.*', this.relatedQuery('funcionarios_filial').count().as('funcionarios_total'))
+            .where('filiais.desativado', 0);
+
+        query.eagerAlgorithm(this.JoinEagerAlgorithm)
+            .eager(`
+                    [funcionarios_filial(withOutPass),
+                    inserted(filiais, onlyInsert).funcionario(withOutPass),
+                    updated(filiais, lastUpdate).funcionario(withOutPass)]
+                `)
+            .filterEager('funcionarios_filial', builder => builder.page(page, limit));
+
+        if (id !== 0) {
+            query.where('filiais.id', id);
+
+            const esse = await query.first().then();
+            return esse;
+        }
+
+        const results = await query.then();
+
 
         return {
             results,

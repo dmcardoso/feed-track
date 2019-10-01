@@ -31,6 +31,7 @@ function Sidebar() {
         },
         {
             description: (collapsed === 'true' ? '' : 'Funcionários'),
+            link: '/funcionarios',
             icon: 'icon-employee',
             marginBottom: '10',
         },

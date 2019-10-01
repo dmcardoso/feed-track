@@ -7,6 +7,7 @@ import Filial from '../pages/filial';
 import Feedback from '../pages/feedback';
 import Feedbacks from '../pages/feedbacks';
 import Funcionario from '../pages/funcionario';
+import Funcionarios from '../pages/funcionarios';
 import Home from '../pages/home';
 
 export default props => (
@@ -16,6 +17,7 @@ export default props => (
         <Route path="/feedback/:id?" component={Feedback} />
         <Route path="/feedbacks/:id?" component={Feedbacks} />
         <Route path="/funcionario/:id?" component={Funcionario} />
+        <Route path="/funcionarios" component={Funcionarios} />
         <Route path="/" component={Home} />
         <Redirect from="*" to="/" />
     </Switch>

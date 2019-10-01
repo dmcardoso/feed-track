@@ -31,6 +31,9 @@ function Form(props) {
             params,
         });
 
+        const funcionarios_filial = await api.get(`filiais/${filial_id}/funcionarios`);
+        console.log(funcionarios_filial.data.results);
+
         return filial_requested.data || null;
     }
 

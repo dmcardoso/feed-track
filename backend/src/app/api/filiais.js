@@ -35,6 +35,27 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id/funcionarios', async (req, res) => {
+    const { id } = req.params;
+    const limit = Number(req.query.limit) || null;
+    const page = Number(req.query.page) - 1;
+
+    const data = {
+        id,
+        limit,
+        page,
+    };
+
+    try {
+        const result = await Filiais.getFuncionarios(data);
+
+        res.json(result);
+    } catch (msg) {
+        console.log(msg);
+        res.status(400).send('Bad request');
+    }
+});
+
 const save = async (req, res) => {
     const { filial } = req.body;
 
