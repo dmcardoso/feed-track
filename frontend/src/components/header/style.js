@@ -7,7 +7,7 @@ const StyledHeader = styled('header')`
     background-color: ${backgroundColor};
     display: flex;
     height: 100px;
-    padding: 0 25px 0 60px;
+    padding: 20px 25px 20px 60px;
     width: 100%;
 `;
 

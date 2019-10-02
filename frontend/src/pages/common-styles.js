@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { parse } from '../util/styled-components/font-size';
 
 const FieldContainer = styled('div')`
     display: flex;
@@ -18,4 +19,9 @@ const Row = styled('div')`
     }
 `;
 
-export { FieldContainer, Row };
+const Subtitle = styled('h3')`
+    font-size: ${parse(18)};
+    margin: 15px 0 15px 0;
+`;
+
+export { FieldContainer, Row, Subtitle };

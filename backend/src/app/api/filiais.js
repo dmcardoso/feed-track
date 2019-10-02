@@ -2,6 +2,7 @@ const express = require('express');
 const moment = require('moment');
 
 const Filiais = require('../models/filiais');
+const FiliaisFuncionarios = require('../models/filiais-funcionarios');
 
 const router = express.Router();
 
@@ -35,19 +36,23 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id/funcionarios', async (req, res) => {
-    const { id } = req.params;
+router.get('/funcionarios', async (req, res) => {
+    const cargo = req.params.cargo || null;
+    const funcionario = req.params.funcionario || null;
+    const filial = req.params.filial || null;
     const limit = Number(req.query.limit) || null;
-    const page = Number(req.query.page) - 1;
+    const page = Number(req.query.page);
 
     const data = {
-        id,
         limit,
         page,
+        cargo,
+        funcionario,
+        filial,
     };
 
     try {
-        const result = await Filiais.getFuncionarios(data);
+        const result = await FiliaisFuncionarios.get(data);
 
         res.json(result);
     } catch (msg) {

@@ -8,8 +8,7 @@ import { parse } from '../../util/styled-components/font-size';
 const Main = styled('main')`
     background-color: ${backgroundColorMain};
     display: flex;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
+    height: auto;
     width: 100%;
 `;
 
@@ -24,6 +23,7 @@ const MainContainer = styled('div')`
 const Container = styled('div')`
     display: flex;
     flex-direction: column;
+    overflow: auto;
     transition: .2s;
     width: calc(100% - ${widthSideBar});
 `;

@@ -8,9 +8,10 @@ import { colors, textColor } from '../../configs/styled-components-options';
 import { parse } from '../../util/styled-components/font-size';
 
 const Table = styled(ReactTable)`
+    //height: auto;
+    //overflow: hidden;
     border: unset !important;
     height: 609px;
-    overflow: hidden;
     width: 100%;
     
     * {
@@ -31,6 +32,11 @@ const Table = styled(ReactTable)`
                 font-weight: bold;
                 padding-left: 42px;
                 text-align: left;
+                
+                .headerOverflow {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
                 
                 &:first-child{
                     padding-left: ${props => (props.padding_left_first_child ? '25px' : '42px')};
@@ -83,6 +89,11 @@ const Table = styled(ReactTable)`
                     text-align: left;
                     text-overflow: ellipsis;
                     white-space: nowrap;
+                    
+                    .headerOverflow {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                     
                     *::before {
                         font-size: 26px !important;

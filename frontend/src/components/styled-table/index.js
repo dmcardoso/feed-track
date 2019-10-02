@@ -30,8 +30,8 @@ function StyledTable({
 
     const columns = headers.map(({ name, ...header_props }) => (
         {
-            Header: props => <div>{name}</div>,
-            Cell: props => <div>{props.value}</div>,
+            Header: props => <div className="headerOverflow">{name}</div>,
+            Cell: props => <div className="headerOverflow">{props.value}</div>,
             sortable: false,
             resizable: false,
             ...header_props,
@@ -70,13 +70,15 @@ function StyledTable({
         const { pageSize = 15, page } = data_props;
 
         const request_data = await data_function({ page, limit: pageSize });
-        const { total, results } = request_data.data;
+        if (request_data.data) {
+            const { total, results } = request_data.data;
 
-        const pages = Math.ceil(Number(total) / Number(pageSize));
+            const pages = Math.ceil(Number(total) / Number(pageSize));
 
-        setTableState({
-            ...tableState, loading: false, data: results, pages, showPagination: pages > 1, page,
-        });
+            setTableState({
+                ...tableState, loading: false, data: results, pages, showPagination: pages > 1, page,
+            });
+        }
     };
 
     return (

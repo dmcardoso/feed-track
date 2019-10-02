@@ -10,6 +10,7 @@ import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-pick
 import Page from '../../components/page';
 import { AppContainerContext } from '../../components/app-container';
 import { error, success } from '../../components/alerts';
+import Funcionarios from './funcionarios';
 
 function Form(props) {
     const [filial, setFilial] = useState(null);
@@ -30,9 +31,6 @@ function Form(props) {
         const filial_requested = await api.get('filiais', {
             params,
         });
-
-        const funcionarios_filial = await api.get(`filiais/${filial_id}/funcionarios`);
-        console.log(funcionarios_filial.data.results);
 
         return filial_requested.data || null;
     }
@@ -160,6 +158,7 @@ function Form(props) {
             >
                 {makeForm}
             </Formik>
+            <Funcionarios history={props.history} filial={filial} />
         </Page>
     );
 }
