@@ -147,23 +147,23 @@ class Funcionarios extends BaseModel {
                 const format_date_search = format_date.format('YYYY-MM-DD');
 
                 if (format_date.isValid()) {
-                    this.orWhere('nascimento', 'like', `%${format_date_search}%`);
+                    this.orWhere('funcionarios.nascimento', 'like', `%${format_date_search}%`);
                 }
-                this.orWhere('nome', 'like', `%${search}%`);
-                this.orWhere('email', 'like', `%${search}%`);
+                this.orWhere('funcionarios.nome', 'like', `%${search}%`);
+                this.orWhere('funcionarios.email', 'like', `%${search}%`);
             });
         }
 
         if (nascimento !== null && format_nascimento.isValid()) {
-            query.where('nascimento', 'like', `%${format_nascimento_search}%`);
+            query.where('funcionarios.nascimento', 'like', `%${format_nascimento_search}%`);
         }
 
         if (nome !== null) {
-            query.where('nome', 'like', `%${nome}%`);
+            query.where('funcionarios.nome', 'like', `%${nome}%`);
         }
 
         if (email !== null) {
-            query.where('email', 'like', `%${email}%`);
+            query.where('funcionarios.email', 'like', `%${email}%`);
         }
 
         if (limit !== null) {

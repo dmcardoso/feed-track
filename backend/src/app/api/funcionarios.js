@@ -36,6 +36,7 @@ router.get('/', async (req, res) => {
 
         res.json(result);
     } catch (msg) {
+        console.log(msg);
         res.status(400).send('Bad request!');
     }
 });
@@ -47,7 +48,7 @@ const save = async (req, res) => {
         upload(req, res, async (files, fields) => {
             const { senha_confirmacao, ...funcionario } = { ...fields };
 
-            if (req.params.id || funcionario.id) funcionario.id = Number(req.params.id);
+            if (funcionario.id) funcionario.id = Number(funcionario.id);
 
             if (funcionario.id === undefined && funcionario.nome.trim() === '') {
                 throw 'Nome inválido!';

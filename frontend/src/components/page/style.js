@@ -5,7 +5,7 @@ import { colors, textColor } from '../../configs/styled-components-options';
 
 const Container = styled('div')`
     display: flex;
-    height: 100%;
+    height: auto;
     width: 100%;
 `;
 

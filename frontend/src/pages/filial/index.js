@@ -158,7 +158,7 @@ function Form(props) {
             >
                 {makeForm}
             </Formik>
-            <Funcionarios history={props.history} filial={filial} />
+            {filial && filial.id && <Funcionarios history={props.history} filial={filial} />}
         </Page>
     );
 }

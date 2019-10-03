@@ -89,6 +89,7 @@ class Cargos extends BaseModel {
         limit,
         search,
         page,
+        descricao,
     }) {
         const query = this.query().select().where('cargos.desativado', 0);
 
@@ -106,6 +107,10 @@ class Cargos extends BaseModel {
 
         if (search !== null) {
             query.where('descricao', 'like', `%${search}%`);
+        }
+
+        if (descricao !== null) {
+            query.where('cargos.descricao', 'like', `%${descricao}%`);
         }
 
         if (limit !== null) {

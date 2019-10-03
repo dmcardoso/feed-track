@@ -11,6 +11,7 @@ const Row = styled('div')`
     display: flex;
     height: auto;
     justify-content: ${props => (props.align ? props.align : 'space-between')};
+    ${props => (props.align_items ? `align-items: ${props.align_items}` : null)};
     margin: ${props => (props.margin ? props.margin : null)};
     width: 100%;
     

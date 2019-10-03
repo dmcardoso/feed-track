@@ -13,7 +13,7 @@ import Button from '../../components/button';
 import { error, loading, success } from '../../components/alerts';
 import { confirmAlert } from '../../components/confirm-alert';
 
-function Funcionarios({ history, filial }) {
+function Filiais({ history, funcionario }) {
     const [defaultOptionsFuncionarios, setDefaultOptionsFuncionarios] = useState([]);
     const [defaultOptionsCargos, setDefaultOptionsCargos] = useState([]);
     const [filial_funcionario, setFilialFuncionario] = useState({});
@@ -21,20 +21,20 @@ function Funcionarios({ history, filial }) {
     const [hiddenFormOpen, setHiddenFormOpen] = useState(false);
 
     const initialValues = filial_funcionario || {
-        funcionario: '',
+        filial: '',
         cargo: '',
     };
 
-    async function loadFuncionarios(search, callback = null) {
+    async function loadFiliais(search, callback = null) {
         const params = {
             nome: search || '',
         };
 
-        const funcionarios = await api.get('funcionarios', {
+        const filiais = await api.get('filiais', {
             params,
         });
 
-        const options = parser('nome', 'id', funcionarios.data.results);
+        const options = parser('filial', 'id', filiais.data.results);
 
         if (callback) {
             callback(options);
@@ -62,9 +62,9 @@ function Funcionarios({ history, filial }) {
     }
 
     async function getFuncionarios(data) {
-        if (filial && filial.id) {
+        if (funcionario && funcionario.id) {
             const funcionarios_filial = await api.get('filiais/funcionarios', {
-                params: { ...data, filial: filial.id },
+                params: { ...data, funcionario: funcionario.id },
             });
 
             return funcionarios_filial;
@@ -74,9 +74,9 @@ function Funcionarios({ history, filial }) {
 
     useEffect(() => {
         const getDefaultOptions = async () => {
-            const funcionarios = await loadFuncionarios();
+            const filiais = await loadFiliais();
             const cargos = await loadCargos();
-            setDefaultOptionsFuncionarios(funcionarios);
+            setDefaultOptionsFuncionarios(filiais);
             setDefaultOptionsCargos(cargos);
             // setLoading(false);
         };
@@ -87,19 +87,14 @@ function Funcionarios({ history, filial }) {
 
     const headers = [
         {
-            name: 'Nome',
-            accessor: 'funcionario_filial.nome',
-            value: 'Nome',
+            name: 'Filial',
+            accessor: 'filial_funcionario.filial',
+            value: 'Filial',
         },
         {
-            name: 'E-mail',
-            accessor: 'funcionario_filial.email',
-            value: 'E-mail',
-        },
-        {
-            name: 'Data de Nascimento',
-            accessor: 'funcionario_filial.nascimento',
-            value: 'Data de Nascimento',
+            name: 'Fundação',
+            accessor: 'filial_funcionario.fundacao',
+            value: 'Fundação',
         },
         {
             name: 'Cargo',
@@ -117,9 +112,9 @@ function Funcionarios({ history, filial }) {
                 setHiddenFormOpen(true);
 
                 const filial_funcionario_edit = {
-                    funcionario: {
-                        value: tableInfo.original.funcionario_filial.id,
-                        label: tableInfo.original.funcionario_filial.nome,
+                    filial: {
+                        value: tableInfo.original.filial_funcionario.id,
+                        label: tableInfo.original.filial_funcionario.filial,
                     },
                     cargo: {
                         value: tableInfo.original.cargo_funcionario.id,
@@ -183,15 +178,15 @@ function Funcionarios({ history, filial }) {
                     <Field
                         type="select"
                         type_select="async"
-                        icon="icon-employee"
-                        name="funcionario"
-                        loadOptions={loadFuncionarios}
-                        id="funcionario"
+                        icon="icon-company"
+                        name="filial"
+                        loadOptions={loadFiliais}
+                        id="filial"
                         cacheOptions
                         defaultOptions={defaultOptionsFuncionarios}
-                        label="Funcionário"
+                        label="Filial"
                         // defaultValue={initialValues.filial}
-                        placeholder="Funcionário"
+                        placeholder="Filial"
                         component={ControlledInput}
                     />
                 </FieldContainer>
@@ -230,7 +225,7 @@ function Funcionarios({ history, filial }) {
     return (
         <>
             <Row align="flex-start" align_items="center">
-                <Subtitle>Funcionários desta Filial</Subtitle>
+                <Subtitle>Filiais deste funcionário</Subtitle>
                 <Button
                     kind="default"
                     label="Adicionar"
@@ -244,8 +239,8 @@ function Funcionarios({ history, filial }) {
                 <Formik
                     validationSchema={
                         Yup.object({
-                            funcionario: Yup.mixed()
-                                .required('Funcionário é obrigatório!'),
+                            filial: Yup.mixed()
+                                .required('Filial é obrigatória!'),
                             cargo: Yup.mixed()
                                 .required('Cargo é obrigatório!'),
                         })
@@ -254,9 +249,9 @@ function Funcionarios({ history, filial }) {
                     onSubmit={async (values, { setSubmitting, resetForm, ...rest }) => {
                         const filial_funcionario_to_save = { ...values };
 
-                        filial_funcionario_to_save.funcionario = filial_funcionario_to_save.funcionario.value;
+                        filial_funcionario_to_save.filial = filial_funcionario_to_save.filial.value;
                         filial_funcionario_to_save.cargo = filial_funcionario_to_save.cargo.value;
-                        filial_funcionario_to_save.filial = filial.id;
+                        filial_funcionario_to_save.funcionario = funcionario.id;
 
                         const result = await api.post('/filiais-funcionarios', {
                             filial_funcionario: filial_funcionario_to_save,
@@ -301,4 +296,4 @@ function Funcionarios({ history, filial }) {
     );
 }
 
-export default Funcionarios;
+export default Filiais;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {
     widthSideBar,
-    backgroundColorMain,
+    backgroundColorMain, colors,
 } from '../../configs/styled-components-options';
 import { parse } from '../../util/styled-components/font-size';
 
@@ -21,6 +21,7 @@ const MainContainer = styled('div')`
 `;
 
 const Container = styled('div')`
+    background-color: ${colors.grey};
     display: flex;
     flex-direction: column;
     overflow: auto;

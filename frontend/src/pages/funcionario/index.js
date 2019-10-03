@@ -11,7 +11,8 @@ import api from '../../services/api';
 import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-picker-parser';
 import { FieldContainer, Row } from '../common-styles';
 import { AppContainerContext } from '../../components/app-container';
-import { error } from '../../components/alerts';
+import {error, success} from '../../components/alerts';
+import Filiais from './filiais';
 
 function Funcionario(props) {
     const [funcionario, setFuncionario] = useState(null);
@@ -215,7 +216,6 @@ function Funcionario(props) {
                     const funcionario_to_save = { ...values };
                     const data = new FormData();
 
-                    console.log(funcionario_to_save);
                     if (
                         funcionario_to_save.nascimento
                         && funcionario_to_save.nascimento !== ''
@@ -235,12 +235,24 @@ function Funcionario(props) {
 
                     const result = await api.post('/funcionarios', data);
 
-                    console.log(result);
+                    if (result.status === 200 && !funcionario_to_save.id) {
+                        const { id } = result.data;
+                        setSubmitting(false);
+                        success('Funcionário cadastrado com sucesso!');
+                        props.history.push(`/funcionario/${id}`);
+                    } else if (result.status === 200 && funcionario_to_save.id) {
+                        setSubmitting(false);
+                        success('Funcionário atualizado com sucesso!');
+                    } else {
+                        setSubmitting(false);
+                        error('Erro ao atualizar funcionário!');
+                    }
                 }}
                 initialValues={initialValues}
             >
                 {makeForm}
             </Formik>
+            {funcionario && funcionario.id && <Filiais history={props.history} funcionario={funcionario} />}
         </Page>
     );
 }

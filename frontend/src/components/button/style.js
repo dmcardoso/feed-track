@@ -10,9 +10,10 @@ const StyledButton = styled('button')`
     font-weight: bold;
     margin: ${props => props.margin};
     ${buttonStyle};
-    padding: 18px 68px;
+    padding: ${props => (props.padding ? props.padding : '18px 68px')};
     transition: .2s;
     width: auto;
+    ${props => (props.height ? `height: ${props.height}` : null)}
     
     &:hover {
         cursor: pointer;

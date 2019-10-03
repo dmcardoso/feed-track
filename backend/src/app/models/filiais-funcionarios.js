@@ -6,6 +6,11 @@ class FiliaisFuncionarios extends BaseModel {
         return 'filiais_funcionarios';
     }
 
+    static get labelName() {
+        return 'Relação de Funcionário';
+    }
+
+
     static get relationMappings() {
         /* eslint import/no-dynamic-require: 0 */
         const Filiais = require(path.resolve(this.modelPaths, 'filiais.js'));
@@ -68,7 +73,7 @@ class FiliaisFuncionarios extends BaseModel {
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['filial', 'funcionario', 'cargo', 'id'],
+            required: ['filial', 'funcionario', 'cargo'],
             properties: {
                 id: { type: 'integer' },
                 filial: { type: 'number' },
@@ -131,14 +136,14 @@ class FiliaisFuncionarios extends BaseModel {
         };
     }
 
-    static async save(filial) {
-        if (filial.id) {
-            const filial_database = await this.query().select('*').where('id', filial.id).first();
-            if (filial_database && filial_database.id) {
+    static async save(funcionario_filial) {
+        if (funcionario_filial.id) {
+            const funcionario_filial_database = await this.query().select('*').where('id', funcionario_filial.id).first();
+            if (funcionario_filial_database && funcionario_filial_database.id) {
                 // eslint-disable-next-line no-param-reassign
-                filial = { ...filial_database, ...filial };
+                funcionario_filial = { ...funcionario_filial_database, ...funcionario_filial };
 
-                return this.query().upsert(filial, filial_database)
+                return this.query().upsert(funcionario_filial, funcionario_filial_database)
                     .then((result) => {
                         if (result) {
                             return result;
@@ -149,13 +154,26 @@ class FiliaisFuncionarios extends BaseModel {
             throw 'Não foi possível atualizar filial!';
         }
 
-        return this.query().upsert(filial)
+        return this.query().upsert(funcionario_filial)
             .then((result) => {
                 if (result) {
                     return result;
                 }
                 return true;
             });
+    }
+
+    static async softDelete({ id }) {
+        const filial_funcionario = await this.query().select('*').where('id', id).where('desativado', '=', '0')
+            .first();
+
+        if (filial_funcionario && filial_funcionario.id) {
+            filial_funcionario.desativado = 1;
+
+            return this.query().soft(filial_funcionario)
+                .then();
+        }
+        throw 'Não foi possível excluir filial!';
     }
 }
 

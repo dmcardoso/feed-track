@@ -37,9 +37,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/funcionarios', async (req, res) => {
-    const cargo = req.params.cargo || null;
-    const funcionario = req.params.funcionario || null;
-    const filial = req.params.filial || null;
+    const cargo = req.query.cargo || null;
+    const funcionario = req.query.funcionario || null;
+    const filial = req.query.filial || null;
     const limit = Number(req.query.limit) || null;
     const page = Number(req.query.page);
 

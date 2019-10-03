@@ -30,7 +30,6 @@ function Feedback(props) {
     async function loadFiliais(search, callback = null) {
         const params = {
             filial: search || '',
-            limit: 15,
         };
 
         const filiais = await api.get('filiais', {
