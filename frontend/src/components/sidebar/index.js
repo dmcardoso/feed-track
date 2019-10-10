@@ -20,8 +20,16 @@ function Sidebar() {
             // clickable: true,
             submenu: [
                 {
-                    description: 'Editar',
-                    icon: 'icon-edit',
+                    description: 'Nova',
+                    icon: 'icon-register',
+                    marginBottom: '10',
+                    onClick() {
+                        console.log('clicked in item submenu 1');
+                    },
+                },
+                {
+                    description: 'Listar',
+                    icon: 'icon-feedback',
                     marginBottom: '10',
                     onClick() {
                         console.log('clicked in item submenu 1');

@@ -11,8 +11,9 @@ import api from '../../services/api';
 import { datePickerDateParser, ptBrDateToDateObject } from '../../util/date-picker-parser';
 import { FieldContainer, Row } from '../common-styles';
 import { AppContainerContext } from '../../components/app-container';
-import {error, success} from '../../components/alerts';
+import { error, success } from '../../components/alerts';
 import Filiais from './filiais';
+import Permissoes from './permissoes';
 
 function Funcionario(props) {
     const [funcionario, setFuncionario] = useState(null);
@@ -252,6 +253,7 @@ function Funcionario(props) {
             >
                 {makeForm}
             </Formik>
+            {funcionario && funcionario.id && <Permissoes history={props.history} funcionario={funcionario} />}
             {funcionario && funcionario.id && <Filiais history={props.history} funcionario={funcionario} />}
         </Page>
     );

@@ -15,6 +15,7 @@ function StyledCheckBoxGroup({
     const show_label = label !== null;
     const show_error = error_message !== null;
 
+    console.log(value);
     return (
         <Container>
             {show_label && <Label>{label}</Label>}
@@ -25,12 +26,12 @@ function StyledCheckBoxGroup({
                             {options.map(option => (
                                 <InputLabel
                                     key={option.value}
-                                    checked={value.includes(option.value)}
+                                    checked={value && value.includes(option.value)}
                                     show_error={show_error}
                                 >
                                     <InputContainer width="auto" margin="0 15px 0 0">
                                         <CheckBox value={option.value} />
-                                        {value.includes(option.value) && <Icon className="icon-checked" />}
+                                        {value && value.includes(option.value) && <Icon className="icon-checked" />}
                                     </InputContainer>
                                     {option.label}
                                 </InputLabel>
@@ -46,7 +47,7 @@ function StyledCheckBoxGroup({
 
 StyledCheckBoxGroup.propTypes = {
     name: PropTypes.string.isRequired,
-    value: PropTypes.array.isRequired,
+    value: PropTypes.array,
     width: PropTypes.string,
     height: PropTypes.string,
     icon: PropTypes.string,
@@ -61,6 +62,7 @@ StyledCheckBoxGroup.propTypes = {
 StyledCheckBoxGroup.defaultProps = {
     width: '100%',
     height: 'auto',
+    value: null,
     icon: null,
     background_color: 'white',
     margin: null,
