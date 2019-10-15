@@ -208,6 +208,8 @@ function Funcionario(props) {
                         .required('Senha é obrigatória!')
                         .oneOf([Yup.ref('senha_confirmacao'), null], 'Senhas devem ser iguais!')
                         .min(6, 'Senha deve conter no mínimo 6 dígitos!'),
+                    sexo: Yup.string()
+                        .required('Sexo é obrigatório!'),
                     senha_confirmacao: Yup.string()
                         .required('Confirmação de senha é obrigatória!')
                         .oneOf([Yup.ref('senha'), null], 'Senhas devem ser iguais!')

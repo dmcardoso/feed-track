@@ -30,10 +30,6 @@ router.get('/', async (req, res) => {
     try {
         const result = await Funcionarios.get(data);
 
-        if (result.foto) {
-            result.foto = `${images_url}${result.foto}`;
-        }
-
         res.json(result);
     } catch (msg) {
         console.log(msg);

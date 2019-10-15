@@ -26,6 +26,10 @@ const StyledInput = styled('input').attrs((props => ({
         border: 1px solid ${colors.green};
         transition: .2s;       
     }
+    
+    &[disabled] {
+        background-color: #eeeeee;
+    }
 `;
 
 export {

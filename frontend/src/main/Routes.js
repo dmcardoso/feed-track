@@ -8,6 +8,7 @@ import Feedback from '../pages/feedback';
 import Feedbacks from '../pages/feedbacks';
 import Funcionario from '../pages/funcionario';
 import Funcionarios from '../pages/funcionarios';
+import Registros from '../pages/registros';
 import Home from '../pages/home';
 
 export default props => (
@@ -18,6 +19,7 @@ export default props => (
         <Route path="/feedbacks/:id?" component={Feedbacks} />
         <Route path="/funcionario/:id?" component={Funcionario} />
         <Route path="/funcionarios" component={Funcionarios} />
+        <Route path="/registros" component={Registros} />
         <Route path="/" component={Home} />
         <Redirect from="*" to="/" />
     </Switch>

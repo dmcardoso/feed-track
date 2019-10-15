@@ -152,6 +152,33 @@ class Filiais extends BaseModel {
         };
     }
 
+    static async save(filial) {
+        if (filial.id) {
+            const filial_database = await this.query().select('*').where('id', filial.id).first();
+            if (filial_database && filial_database.id) {
+                // eslint-disable-next-line no-param-reassign
+                filial = { ...filial_database, ...filial };
+
+                return this.query().upsert(filial, filial_database)
+                    .then((result) => {
+                        if (result) {
+                            return result;
+                        }
+                        return true;
+                    });
+            }
+            throw 'Não foi possível atualizar filial!';
+        }
+
+        return this.query().upsert(filial)
+            .then((result) => {
+                if (result) {
+                    return result;
+                }
+                return true;
+            });
+    }
+
     static async softDelete({ id }) {
         const filial = await this.query().select('*').where('id', id).where('desativado', '=', '0')
             .first();

@@ -89,7 +89,7 @@ function Filiais(props) {
     ];
 
     return (
-        <Page title="Filiais">
+        <Page title="Feedbacks">
             <StyledTable
                 headers={headers}
                 fireFetch={updateTable}

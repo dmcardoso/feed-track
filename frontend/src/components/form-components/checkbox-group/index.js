@@ -15,7 +15,6 @@ function StyledCheckBoxGroup({
     const show_label = label !== null;
     const show_error = error_message !== null;
 
-    console.log(value);
     return (
         <Container>
             {show_label && <Label>{label}</Label>}

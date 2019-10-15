@@ -9,7 +9,7 @@ function ControlledUploadFile({
 }) {
     const { name, value } = field;
 
-    let image_preview = (value && typeof value === 'string') ? { preview: `${api.defaults.baseURL}${value}` } : value;
+    let image_preview = (value && typeof value === 'string') ? { preview: `${api.defaults.baseURL}images/${value}` } : value;
     image_preview = (!value) ? '' : image_preview;
 
     const [photo, setPhoto] = useState(image_preview);

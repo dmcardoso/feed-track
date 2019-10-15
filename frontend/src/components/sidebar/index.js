@@ -53,6 +53,7 @@ function Sidebar() {
             description: (collapsed === 'true' ? '' : 'Registro de Atividades'),
             icon: 'icon-history',
             marginBottom: '32',
+            link: '/registros',
         },
     ];
 

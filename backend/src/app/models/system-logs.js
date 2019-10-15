@@ -82,6 +82,91 @@ class SystemLogs extends BaseModel {
             },
         };
     }
+
+    static async get({
+        id,
+        limit,
+        search,
+        page,
+    }) {
+        const query = this.query().select();
+
+        query.eagerAlgorithm(this.JoinEagerAlgorithm)
+            .eager('funcionario');
+
+        if (id !== 0) {
+            query.where('system_logs.id', id);
+        } else {
+            query.orderBy('system_logs.criacao', 'desc');
+        }
+
+        if (search !== null) {
+            query.where('system_logs.mensagem', 'like', `%${search}%`);
+        }
+
+        if (limit !== null) {
+            query.limit(limit);
+        }
+
+        if (page !== 1 && limit !== null) {
+            query.offset(page * limit - limit);
+        }
+
+        if (id !== 0) {
+            return query.first().then();
+        }
+
+        const results = await query.then();
+
+        results.forEach((value, index) => {
+            const getAction = (action) => {
+                switch (action) {
+                    case 'insert':
+                        return 'Criação';
+                    case 'update':
+                        return 'Atualização';
+                    case 'delete':
+                        return 'Exclusão';
+                    default:
+                        return 'Ação';
+                }
+            };
+
+            const getTable = (group) => {
+                switch (group) {
+                    case 'cargos':
+                        return 'Cargos';
+                    case 'feedbacks':
+                        return 'Feedbacks';
+                    case 'filiais':
+                        return 'Filiais';
+                    case 'filiais_funcionarios':
+                        return 'Filiais Funcionários';
+                    case 'funcionarios':
+                        return 'Funcionários';
+                    case 'funcionarios_permissoes':
+                        return 'Funcionários Permissões';
+                    case 'permissoes':
+                        return 'Permissões';
+                    default:
+                        return 'Tabela';
+                }
+            };
+
+            results[index].action_descricao = getAction(value.action);
+            results[index].grupo_descricao = getTable(value.grupo);
+        });
+
+
+        console.log(results);
+
+        const total = await query.groupBy('id').resultSize();
+
+        return {
+            results,
+            total,
+        };
+    }
 }
 
 module.exports = SystemLogs;
