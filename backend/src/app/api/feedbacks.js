@@ -46,6 +46,31 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/estatisticas/total', async (req, res) => {
+    const id = req.query.id || req.params.id || 0;
+    const limit = req.query.limit || null;
+    const search = req.query.search || null;
+
+    const data_referencia = req.query.data_referencia || null;
+    const filial = req.query.filial || null;
+
+    const data = {
+        id,
+        limit,
+        search,
+        data_referencia,
+        filial,
+    };
+    try {
+        const statistics = await Feedbacks.estatisticasTotal(data);
+
+        res.json(statistics);
+    } catch (msg) {
+        console.log(msg);
+        res.status(400).send('Bad request!');
+    }
+});
+
 const save = async (req, res) => {
     const { feedback } = req.body;
 

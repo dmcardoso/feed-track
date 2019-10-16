@@ -210,6 +210,87 @@ class Feedbacks extends BaseModel {
         };
     }
 
+    static async estatisticasTotal({
+        id,
+        limit,
+        search,
+        data_referencia,
+        filial,
+    }) {
+        const query = this.query().select('feedbacks.data_referencia')
+            .sum('feedbacks.renovacoes as total_renovacoes')
+            .sum('feedbacks.reativacoes as total_reativacoes')
+            .sum('feedbacks.vendas as total_vendas')
+            .sum('feedbacks.cadastros as total_cadastros')
+            .groupBy('feedbacks.data_referencia')
+            .where('feedbacks.desativado', 0);
+
+        // query.eagerAlgorithm(this.JoinEagerAlgorithm)
+        //     .eager(`
+        //             [funcionario_feedback(desativado),
+        //             filial_feedback(desativado),
+        //             inserted(feedbacks, onlyInsert).funcionario(withOutPass),
+        //             updated(feedbacks, lastUpdate).funcionario(withOutPass),
+        //             ]
+        //         `);
+
+        if (id !== 0) {
+            query.where('feedbacks.id', id);
+        }
+
+        const format_data_referencia_out = moment(data_referencia, 'DD/MM/YYYY');
+        const format_data_referencia_search_out = format_data_referencia_out.format('YYYY-MM-DD');
+
+        if (search !== null) {
+            // eslint-disable-next-line func-names
+            query.andWhere(function () {
+                this.orWhere('descricao', 'like', `%${search}%`);
+
+                const format_date = moment(search, 'DD/MM/YYYY');
+                const format_date_search = format_date.format('YYYY-MM-DD');
+                if (format_date.isValid()) {
+                    this.orWhere('inserted.criacao', 'like', `%${format_date_search}%`);
+                }
+
+                const format_data_referencia = moment(search, 'DD/MM/YYYY');
+                const format_data_referencia_search = format_data_referencia.format('YYYY-MM-DD');
+
+                if (format_data_referencia.isValid()) {
+                    this.orWhere('data_referencia', 'like', `%${format_data_referencia_search}%`);
+                }
+
+                this.orWhere('vendas', '=', search);
+                this.orWhere('cadastros', '=', search);
+                this.orWhere('renovacoes', '=', search);
+                this.orWhere('reativacoes', '=', search);
+                this.orWhere('funcionario_feedback.nome', 'like', `%${search}%`);
+                this.orWhere('filial_feedback.filial', 'like', `%${search}%`);
+            });
+        }
+
+        if (data_referencia !== null && format_data_referencia_out.isValid()) {
+            query.where('feedbacks.data_referencia', 'like', `%${format_data_referencia_search_out}%`);
+        }
+
+        if (filial !== null) {
+            query.where('filial_feedback.filial', 'like', `%${filial}%`);
+        }
+
+        if (limit !== null) {
+            query.limit(limit);
+        }
+
+        if (id !== 0) {
+            return query.first().then();
+        }
+
+        const results = await query.then();
+
+        return {
+            results,
+        };
+    }
+
     static async save(feedback) {
         if (feedback.id) {
             const feedback_database = await this.query().select('*').where('id', feedback.id).first();

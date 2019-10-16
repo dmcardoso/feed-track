@@ -23,6 +23,7 @@
     "react-spinners": "0.5.12",
     "react-table": "6.10.0",
     "reactjs-popup": "^1.5.0",
+    "recharts": "^1.8.0",
     "styled-components": "4.3.2",
     "styled-theming": "2.2.0",
     "yup": "0.27.0"
