@@ -8,7 +8,7 @@ import {
 } from '../common-style';
 
 function Select({
-    width, height, type_select, icon, label, error_message, name, margin, ...props
+    width, height, type_select, icon, label, error_message, name, margin, z_index, ...props
 }) {
     const id = props.id || name;
 
@@ -72,6 +72,10 @@ function Select({
             fontWeight: 'bold',
             paddingLeft: show_icon ? '54px' : '0',
         }),
+        menu: (provided, state) => ({
+            ...provided,
+            zIndex: 3,
+        }),
     };
 
     const attrs = {
@@ -86,7 +90,7 @@ function Select({
         <Container width={width} margin={margin}>
             {show_label && <Label htmlFor={id || name}>{label}</Label>}
             <InputContainer height={height}>
-                {show_icon && <Icon className={icon} z_index={2} />}
+                {show_icon && <Icon className={icon} z_index={z_index} />}
                 <ReactStyledSelect
                     {...attrs}
                     theme={addTheme}
@@ -114,6 +118,7 @@ Select.propTypes = {
     onKeyDown: PropTypes.func,
     type_select: PropTypes.string,
     width: PropTypes.string,
+    z_index: PropTypes.number,
     height: PropTypes.string,
     margin: PropTypes.string,
     icon: PropTypes.string,
@@ -134,6 +139,7 @@ Select.defaultProps = {
     width: '100%',
     height: 'auto',
     margin: null,
+    z_index: 2,
     icon: null,
     error_message: null,
     options: [],

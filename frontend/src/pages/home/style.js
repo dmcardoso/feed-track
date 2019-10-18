@@ -8,6 +8,7 @@ const Card = styled('div')`
     justify-content: space-between;
     padding: 15px 15px 20px 15px;
     width: ${props => (props.width ? props.width : 'auto')};
+    ${props => (props.margin ? `margin: ${props.margin};` : null)}
 `;
 
 const Title = styled('h2')`

@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/estatisticas/total', async (req, res) => {
+router.get('/estatisticas/datas', async (req, res) => {
     const id = req.query.id || req.params.id || 0;
     const limit = req.query.limit || null;
     const search = req.query.search || null;
@@ -62,7 +62,34 @@ router.get('/estatisticas/total', async (req, res) => {
         filial,
     };
     try {
-        const statistics = await Feedbacks.estatisticasTotal(data);
+        const statistics = await Feedbacks.estatisticasDatas(data);
+
+        res.json(statistics);
+    } catch (msg) {
+        console.log(msg);
+        res.status(400).send('Bad request!');
+    }
+});
+
+router.get('/estatisticas/totais', async (req, res) => {
+    const id = req.query.id || req.params.id || 0;
+    const limit = req.query.limit || null;
+    const search = req.query.search || null;
+
+    const data_referencia = req.query.data_referencia || null;
+    const filial = req.query.filial || null;
+    const funcionario = req.query.funcionario || null;
+
+    const data = {
+        id,
+        limit,
+        search,
+        data_referencia,
+        filial,
+        funcionario,
+    };
+    try {
+        const statistics = await Feedbacks.estatisticasTotais(data);
 
         res.json(statistics);
     } catch (msg) {

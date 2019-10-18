@@ -210,7 +210,7 @@ class Feedbacks extends BaseModel {
         };
     }
 
-    static async estatisticasTotal({
+    static async estatisticasDatas({
         id,
         limit,
         search,
@@ -224,15 +224,6 @@ class Feedbacks extends BaseModel {
             .sum('feedbacks.cadastros as total_cadastros')
             .groupBy('feedbacks.data_referencia')
             .where('feedbacks.desativado', 0);
-
-        // query.eagerAlgorithm(this.JoinEagerAlgorithm)
-        //     .eager(`
-        //             [funcionario_feedback(desativado),
-        //             filial_feedback(desativado),
-        //             inserted(feedbacks, onlyInsert).funcionario(withOutPass),
-        //             updated(feedbacks, lastUpdate).funcionario(withOutPass),
-        //             ]
-        //         `);
 
         if (id !== 0) {
             query.where('feedbacks.id', id);
@@ -285,6 +276,54 @@ class Feedbacks extends BaseModel {
         }
 
         const results = await query.then();
+
+        return {
+            results,
+        };
+    }
+
+    static async estatisticasTotais({
+        id,
+        limit,
+        data_referencia,
+        filial,
+        funcionario,
+    }) {
+        const query = this.query().select('')
+            .sum('feedbacks.renovacoes as total_renovacoes')
+            .sum('feedbacks.reativacoes as total_reativacoes')
+            .sum('feedbacks.vendas as total_vendas')
+            .sum('feedbacks.cadastros as total_cadastros')
+            .where('feedbacks.desativado', 0);
+
+        if (id !== 0) {
+            query.where('feedbacks.id', id);
+        }
+
+        const format_data_referencia_out = moment(data_referencia, 'DD/MM/YYYY');
+        const format_data_referencia_search_out = format_data_referencia_out.format('YYYY-MM-DD');
+
+        if (data_referencia !== null && format_data_referencia_out.isValid()) {
+            query.where('feedbacks.data_referencia', 'like', `%${format_data_referencia_search_out}%`);
+        }
+
+        if (filial !== null) {
+            query.where('feedbacks.filial', '=', filial);
+        }
+
+        if (funcionario !== null) {
+            query.where('feedbacks.funcionario', '=', funcionario);
+        }
+
+        if (limit !== null) {
+            query.limit(limit);
+        }
+
+        if (id !== 0) {
+            return query.first().then();
+        }
+
+        const results = await query.first().then();
 
         return {
             results,
