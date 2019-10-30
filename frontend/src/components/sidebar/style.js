@@ -24,9 +24,8 @@ const Logo = styled('img')`
     width: 57px;
 `;
 
-const UserImage = styled('div')`
+const UserImage = styled('img')`
     align-self: center;
-    background: url(${user});
     border-radius: 50%;
     box-shadow: 0 3px 3px rgba(0,0,0,.16);
     height: 258px;

@@ -131,7 +131,7 @@ class Funcionarios extends BaseModel {
                     updated(funcionarios, lastUpdate).funcionario(withOutPass)]
                 `);
 
-        if (id !== 0) {
+        if (id && id !== 0) {
             query.where('funcionarios.id', id);
         } else {
             query.orderBy('inserted.criacao', 'asc');
@@ -163,18 +163,23 @@ class Funcionarios extends BaseModel {
         }
 
         if (email !== null) {
-            query.where('funcionarios.email', 'like', `%${email}%`);
+            console.log(email);
+            query.where('funcionarios.email', 'like', email);
         }
 
-        if (limit !== null) {
+        if (limit && limit !== null) {
             query.limit(limit);
         }
 
-        if (page !== 1 && limit !== null) {
+        if (page && page !== 1 && limit !== null) {
             query.offset(page * limit - limit);
         }
 
-        if (id !== 0) {
+        if (id && id !== 0) {
+            return query.first().then();
+        }
+
+        if (email && email !== null) {
             return query.first().then();
         }
 

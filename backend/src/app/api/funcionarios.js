@@ -1,6 +1,6 @@
 const express = require('express');
 const moment = require('moment');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const { images_url } = require('../../config/paths');
 const Funcionarios = require('../models/funcionarios');
 
@@ -37,6 +37,11 @@ router.get('/', async (req, res) => {
     }
 });
 
+const encryptPassword = password => {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
+};
+
 const save = async (req, res) => {
     try {
         const { upload } = require('../util/fileupload');
@@ -54,7 +59,7 @@ const save = async (req, res) => {
                 throw 'Senhas devem ser iguais!';
             }
 
-            if (funcionario.senha) funcionario.senha = crypto.createHmac('sha256', funcionario.senha).digest('hex');
+            if (funcionario.senha) funcionario.senha = encryptPassword(funcionario.senha);
 
             const result = await Funcionarios.save(funcionario);
 

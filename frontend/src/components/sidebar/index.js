@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
+import { withRouter } from 'react-router';
 import { AppContext } from '../../main/App';
 import logo from '../../assets/img/logo.png';
+import api from '../../services/api';
 
 import {
     Sidebar as Nav, Logo, UserImage, UserName, BottomSideBar,
@@ -8,7 +10,7 @@ import {
 
 import Menu from '../menu';
 
-function Sidebar() {
+function Sidebar(props) {
     const { changeCollapsed, collapsed } = useContext(AppContext);
 
     const menu_itens = [
@@ -24,7 +26,7 @@ function Sidebar() {
                     icon: 'icon-register',
                     marginBottom: '10',
                     onClick() {
-                        console.log('clicked in item submenu 1');
+                        props.history.push('/filial');
                     },
                 },
                 {
@@ -32,7 +34,7 @@ function Sidebar() {
                     icon: 'icon-feedback',
                     marginBottom: '10',
                     onClick() {
-                        console.log('clicked in item submenu 1');
+                        props.history.push('/filiais');
                     },
                 },
             ],
@@ -42,12 +44,48 @@ function Sidebar() {
             link: '/funcionarios',
             icon: 'icon-employee',
             marginBottom: '10',
+            submenu: [
+                {
+                    description: 'Novo',
+                    icon: 'icon-register',
+                    marginBottom: '10',
+                    onClick() {
+                        props.history.push('/funcionario');
+                    },
+                },
+                {
+                    description: 'Listar',
+                    icon: 'icon-feedback',
+                    marginBottom: '10',
+                    onClick() {
+                        props.history.push('/funcionario');
+                    },
+                },
+            ],
         },
         {
             description: (collapsed === 'true' ? '' : 'Feedbacks'),
             icon: 'icon-feedback',
             link: '/feedbacks',
             marginBottom: '10',
+            submenu: [
+                {
+                    description: 'Novo',
+                    icon: 'icon-register',
+                    marginBottom: '10',
+                    onClick() {
+                        props.history.push('/feedback');
+                    },
+                },
+                {
+                    description: 'Listar',
+                    icon: 'icon-feedback',
+                    marginBottom: '10',
+                    onClick() {
+                        props.history.push('/feedbacks');
+                    },
+                },
+            ],
         },
         {
             description: (collapsed === 'true' ? '' : 'Registro de Atividades'),
@@ -57,15 +95,19 @@ function Sidebar() {
         },
     ];
 
+    const userData = JSON.parse(localStorage.getItem('userKey'));
+    const foto = userData.foto ? `${api.defaults.baseURL}images/${userData.foto}` : null;
+
     return (
         <Nav>
             <Logo src={logo} />
-            {collapsed === 'false' && <UserImage />}
-            {collapsed === 'false' && <UserName>Daniel</UserName>}
+            {collapsed === 'false' && foto && <UserImage src={foto} />}
+            {collapsed === 'false' && <UserName>{userData.nome}</UserName>}
             <Menu
                 marginBottom={collapsed === 'true' ? 75 : 50}
                 icon="icon-man-user"
                 as="div"
+                link={userData && userData.id ? `funcionario/${userData.id}` : 'funcionarios'}
                 description={collapsed === 'true' ? null : 'Perfil'}
             />
             {menu_itens.map(item => <Menu {...item} key={item.icon} />)}
@@ -89,4 +131,4 @@ function Sidebar() {
     );
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
