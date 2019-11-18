@@ -55,7 +55,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+#.env
 
 # next.js build output
 .next
@@ -92,4 +92,6 @@ atlassian-ide-plugin.xml
 # Cursive Clojure plugin
 .idea/replstate.xml
 
-# Editor-based Rest 
+# Editor-based Rest
+#!./backend/src/uploads/!.gitkeep
+/backend/src/uploads/
